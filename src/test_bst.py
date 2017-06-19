@@ -4,14 +4,15 @@ import pytest
 import bst
 
 PARAMS_TABLE_INSERT = [
-    ([5, 6, 3, 4], [5, 6, 3, None, 4]),
-    ([10, 15, 20, 35], [15, None, None, None, None]),
-    ([], [None, None, None, None, None])
+    ([5, 6, 3, 4], [5, 6, 3, 4])
 ]
 
 PARAMS_TABLE_SEARCH = [
     ([5, 6, 3, 4, 0], 5, 5),
     ([10, 5, 20, 35, 7], 20, 20),
+]
+
+PARAMS_TABLE_SEARCH_NONE = [
     ([10, 5, 20, 35, 7], 137, None)
 ]
 
@@ -51,28 +52,34 @@ def test_insert(data, results):
     assert test_tree.root is None
     for i in data:
         test_tree.insert(i)
-    assert test_tree.root == results[0]
-    assert test_tree.right == results[1]
-    assert test_tree.left == results[2]
-    assert test_tree.left.left == results[3]
-    assert test_tree.left.right == results[5]
+    assert test_tree.root.value == results[0]
+    assert test_tree.root.right.value == results[1]
+    assert test_tree.root.left.value == results[2]
+    assert test_tree.root.left.right.value == results[3]
 
 
 @pytest.mark.parametrize("data, search_for_me, result", PARAMS_TABLE_SEARCH)
 def test_search(data, search_for_me, result):
     """Test if search works correctly."""
     test_tree = bst.Binary_Search_Tree()
-    assert test_tree.root is None
     for i in data:
         test_tree.insert(i)
     assert test_tree.search(search_for_me).value == result
+
+
+@pytest.mark.parametrize("data, search_for_me, result", PARAMS_TABLE_SEARCH_NONE)
+def test_search(data, search_for_me, result):
+    """Test if search works correctly."""
+    test_tree = bst.Binary_Search_Tree()
+    for i in data:
+        test_tree.insert(i)
+    assert test_tree.search(search_for_me) == result
 
 
 @pytest.mark.parametrize("data, result", PARAMS_TABLE_SIZE)
 def test_size(data, result):
     """Test if size works correctly."""
     test_tree = bst.Binary_Search_Tree()
-    assert test_tree.root is None
     for i in data:
         test_tree.insert(i)
     assert test_tree.size() == result
@@ -82,7 +89,6 @@ def test_size(data, result):
 def test_depth(data, result):
     """Test if depth works correctly."""
     test_tree = bst.Binary_Search_Tree()
-    assert test_tree.root is None
     for i in data:
         test_tree.insert(i)
     assert test_tree.depth() == result
@@ -92,7 +98,6 @@ def test_depth(data, result):
 def test_contains(data, contains_me, result):
     """Test if contains works correctly."""
     test_tree = bst.Binary_Search_Tree()
-    assert test_tree.root is None
     for i in data:
         test_tree.insert(i)
     assert test_tree.contains(contains_me) == result
@@ -102,7 +107,6 @@ def test_contains(data, contains_me, result):
 def test_balance(data, result):
     """Test if balance works correctly."""
     test_tree = bst.Binary_Search_Tree()
-    assert test_tree.root is None
     for i in data:
         test_tree.insert(i)
     assert test_tree.balance() == result
