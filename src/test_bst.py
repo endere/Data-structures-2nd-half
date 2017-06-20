@@ -43,8 +43,18 @@ PARAMS_TABLE_BALANCE = [
     ([6, 2, 3, 4, 1, 5, 7, 8, 9], -1)
 ]
 
-
-
+PARAMS_TABLE_BREADTH = [
+    ([4, 2, 3, 1, 6, 5, 7], [4, 2, 3, 1, 6, 5, 7])
+]
+PARAMS_TABLE_PREORDER = [
+    ([4, 2, 3, 1, 6, 5, 7], [4, 2, 1, 3, 6, 5, 7])
+]
+PARAMS_TABLE_POSTORDER = [
+    ([4, 2, 3, 1, 6, 5, 7], [1, 3, 2, 5, 7, 6, 4])
+]
+PARAMS_TABLE_INORDER = [
+    ([4, 2, 3, 1, 6, 5, 7], [1, 2, 3, 4, 5, 6, 7])
+]
 @pytest.mark.parametrize("data, results", PARAMS_TABLE_INSERT)
 def test_insert(data, results):
     """Test if insertion works correctly."""
@@ -110,3 +120,31 @@ def test_balance(data, result):
     for i in data:
         test_tree.insert(i)
     assert test_tree.balance() == result
+
+
+@pytest.mark.parametrize("data, result", PARAMS_TABLE_BREADTH)
+def test_breadth_first(data, result):
+    """test breadth first"""
+    test_tree = bst.Binary_Search_Tree(data)
+    assert test_tree.breadth_first() == result
+
+
+@pytest.mark.parametrize("data, result", PARAMS_TABLE_PREORDER)
+def test_pre_order(data, result):
+    """test breadth first"""
+    test_tree = bst.Binary_Search_Tree(data)
+    assert test_tree.pre_order() == result
+
+
+@pytest.mark.parametrize("data, result", PARAMS_TABLE_POSTORDER)
+def test_post_order(data, result):
+    """test breadth first"""
+    test_tree = bst.Binary_Search_Tree(data)
+    assert test_tree.post_order() == result
+
+
+@pytest.mark.parametrize("data, result", PARAMS_TABLE_INORDER)
+def test_in_order(data, result):
+    """test breadth first"""
+    test_tree = bst.Binary_Search_Tree(data)
+    assert test_tree.in_order() == result

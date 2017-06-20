@@ -15,8 +15,12 @@ class Node(object):
 class Binary_Search_Tree(object):
     """I am a search tree."""
 
-    def __init__(self):
+    def __init__(self, iterable=None):
         """Init for our BST."""
+        if iterable:
+            if type(iterable) in [list, tuple]:
+                for i in iterable:
+                    self.insert(i)
         self.root = None
         self.length = 0
         self.right_depth = 0
@@ -24,6 +28,8 @@ class Binary_Search_Tree(object):
 
     def insert(self, val):
         """Insert a node for start and for right and left."""
+        if type(val) not in [float, int]:
+            raise TypeError('Numbers only >:(')
         if self.root is None:
             self.root = Node(val)
             self.length += 1
@@ -34,7 +40,7 @@ class Binary_Search_Tree(object):
                 direction = 'left'
             current = self.root
             depth = 0
-            while True:
+            while current:
                 depth += 1
                 if val == current.value:
                     break
@@ -48,7 +54,6 @@ class Binary_Search_Tree(object):
                             if depth > self.left_depth:
                                 self.left_depth = depth
                         self.length += 1
-                        break
                     else:
                         current = current.right
                 else:
@@ -61,22 +66,30 @@ class Binary_Search_Tree(object):
                             if depth > self.left_depth:
                                 self.left_depth = depth
                         self.length += 1
-                        break
                     else:
                         current = current.left
 
     def search(self, val):
         """Search binary tree for values."""
         current = self.root
+        # print('started at: ', current.value)
         try:
             while True:
                 if val > current.value:
+                    # print('went right!')
                     current = current.right
+                    # print(current.value)
                 elif val < current.value:
+                    # print('went left!')
                     current = current.left
+                    # print(current.value)
                 elif val == current.value:
+                    # print('found it!')
+                    # print(current.value)
                     return current
+                # print('---------------')
         except AttributeError:
+            # print('not here')
             return None
 
     def size(self):
@@ -110,10 +123,23 @@ def wrapper(func, *args, **kwargs):
 
 if __name__ == '__main__':
     Bullshit_tree = Binary_Search_Tree()
-    wrapped6 = wrapper(Bullshit_tree.search, 6)
-    wrapped14 = wrapper(Bullshit_tree.search, 14)
-    data = [6, 2, 7, 1, 3, 4, 8, 9, 10, 11, 12, 13, 14]
+    import random
+    data = [random.randint(0,100) for i in range(20)]
+    print(data)
     for i in data:
         Bullshit_tree.insert(i)
-    print(timeit.timeit(wrapped6))
-    print(timeit.timeit(wrapped14))
+    wrapped1 = wrapper(Bullshit_tree.search, data[0])
+    wrapped2 = wrapper(Bullshit_tree.search, data[-1])
+    # print(Bullshit_tree.size())
+    # print(Bullshit_tree.depth())
+    # print(Bullshit_tree.balance())
+    # print(Bullshit_tree.right_depth)
+    # print(Bullshit_tree.left_depth)
+    # print(Bullshit_tree.root.value)
+    # print(Bullshit_tree.root.right.value)
+    # print(Bullshit_tree.root.right.left.value)
+    print(timeit.timeit(wrapped1))
+    print(timeit.timeit(wrapped2))
+    # print(Bullshit_tree.search(data[0]))
+    # print(Bullshit_tree.search(data[-1]))
+
