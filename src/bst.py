@@ -124,16 +124,30 @@ class Binary_Search_Tree(object):
             current = the_list.pop(0)
 
     def pre_order(self):
-        pass
+        current = self.root
+        the_list = []
+        for i in range(self.length):
+            current.right and the_list.append(current.right)
+            yield current.value
+            if current.left:
+                current = current.left
+            else:
+                current = the_list.pop()
 
     def post_order(self):
         pass
 
+
     def in_order(self):
-        pass
-
-    
-
+        current = self.root
+        the_list = []
+        while current:
+            if current.right and current.right in the_list or current.left is None and current.right is None:
+                yield current.value
+            else:
+                the_list = [current.left, current, current.right] + the_list
+            if len(the_list) > 0:
+                current = the_list.pop(0)
 
 
 
@@ -163,8 +177,10 @@ if __name__ == '__main__':
     # print(Bullshit_tree.root.right.left.value)
     # print(timeit.timeit(wrapped1))
     # print(timeit.timeit(wrapped2))
-    thing = Bullshit_tree.breadth_first()
-    for i in range(Bullshit_tree.size()):
-        print(next(thing))
+    thing = Bullshit_tree.in_order()
+    array = []
+    while len(array) < Bullshit_tree.size():
+        array.append(next(thing))
+        print(array)
     # print(Bullshit_tree.search(data[-1]))
 
