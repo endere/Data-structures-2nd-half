@@ -1,6 +1,6 @@
 
 """The binary search tree data structure."""
-
+import timeit
 
 class Node(object):
     """I am a Node."""
@@ -101,12 +101,19 @@ class Binary_Search_Tree(object):
         """Return our balance for our binary search tree."""
         return self.right_depth - self.left_depth
 
+def wrapper(func, *args, **kwargs):
+    """Creates a value for a function with a specific arguement called to it."""
+    def wrapped():
+        return func(*args, **kwargs)
+    return wrapped
+    #code found at http://pythoncentral.io/time-a-python-function/
 
 if __name__ == '__main__':
     Bullshit_tree = Binary_Search_Tree()
-
-    data = [6, 2, 7, 1, 3, 4]
+    wrapped6 = wrapper(Bullshit_tree.search, 6)
+    wrapped14 = wrapper(Bullshit_tree.search, 14)
+    data = [6, 2, 7, 1, 3, 4, 8, 9, 10, 11, 12, 13, 14]
     for i in data:
         Bullshit_tree.insert(i)
-    print(Bullshit_tree.search(7))
-    print(Bullshit_tree.search(5))
+    print(timeit.timeit(wrapped6))
+    print(timeit.timeit(wrapped14))
