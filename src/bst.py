@@ -114,6 +114,29 @@ class Binary_Search_Tree(object):
         """Return our balance for our binary search tree."""
         return self.right_depth - self.left_depth
 
+    def breadth_first(self):
+        current = self.root
+        the_list = []
+        for i in range(self.length):
+            current.left and the_list.append(current.left)
+            current.right and the_list.append(current.right)
+            yield current.value
+            current = the_list.pop(0)
+
+    def pre_order(self):
+        pass
+
+    def post_order(self):
+        pass
+
+    def in_order(self):
+        pass
+
+    
+
+
+
+
 def wrapper(func, *args, **kwargs):
     """Creates a value for a function with a specific arguement called to it."""
     def wrapped():
@@ -124,12 +147,12 @@ def wrapper(func, *args, **kwargs):
 if __name__ == '__main__':
     Bullshit_tree = Binary_Search_Tree()
     import random
-    data = [random.randint(0,100) for i in range(20)]
+    data = [4, 2, 3, 6, 5, 1, 7]
     print(data)
     for i in data:
         Bullshit_tree.insert(i)
-    wrapped1 = wrapper(Bullshit_tree.search, data[0])
-    wrapped2 = wrapper(Bullshit_tree.search, data[-1])
+    # wrapped1 = wrapper(Bullshit_tree.search, data[0])
+    # wrapped2 = wrapper(Bullshit_tree.search, data[-1])
     # print(Bullshit_tree.size())
     # print(Bullshit_tree.depth())
     # print(Bullshit_tree.balance())
@@ -138,8 +161,10 @@ if __name__ == '__main__':
     # print(Bullshit_tree.root.value)
     # print(Bullshit_tree.root.right.value)
     # print(Bullshit_tree.root.right.left.value)
-    print(timeit.timeit(wrapped1))
-    print(timeit.timeit(wrapped2))
-    # print(Bullshit_tree.search(data[0]))
+    # print(timeit.timeit(wrapped1))
+    # print(timeit.timeit(wrapped2))
+    thing = Bullshit_tree.breadth_first()
+    for i in range(Bullshit_tree.size()):
+        print(next(thing))
     # print(Bullshit_tree.search(data[-1]))
 
