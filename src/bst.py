@@ -156,59 +156,101 @@ class Binary_Search_Tree(object):
 
     def deletion(self,value):
         current = self.root
+        if value > self.root.value:
+            direction = 'right'
+        else:
+            direction = 'left'
         while True:
             try:
                 if value > current.value:
                     if value == current.right.value:
                         if current.right.right is None and current.right.left is None:
                             current.right = None
+                            depth_node = current
                             break
                         elif current.right.left is None:
                             current.right = current.right.right
+                            depth_node = current
                             break
                         elif current.right.right is None:
                             current.right = current.right.left
+                            depth_node = current
                             break
                         else:
                             parent = current
                             remove = parent.right
                             new = self._findmax(remove, remove.left)
-                            new[0].right = None
-                            if new[1].left:
-                                new[0].right = new[1].left
+                            if new[0] != remove:
+                                new[0].right = None
+                                if new[1].left:
+                                    new[0].right = new[1].left
                             parent.right = new[1]
                             new[1].left = remove.left
                             new[1].right = remove.right
+                            depth_node = current
                             break
                     current = current.right
                 elif value < current.value:
                     if value == current.left.value:
                         if current.left.left is None and current.left.right is None:
                             current.left = None
+                            depth_node = current
                             break
                         elif current.left.left is None:
                             current.left = current.left.right
+                            depth_node = current
                             break
                         elif current.left.right is None:
                             current.left = current.left.left
+                            depth_node = current
                             break
                         else:
                             parent = current
                             remove = parent.left
                             new = self._findmax(remove, remove.left)
-                            new[0].right = None
-                            if new[1].left:
-                                new[0].right = new[1].left
+                            if new[0] != remove:
+                                new[0].right = None
+                                if new[1].left:
+                                    new[0].right = new[1].left
                             parent.right = new[1]
                             new[1].left = remove.left
                             new[1].right = remove.right
+                            depth_node = current
                             break
                     current = current.left
+                elif value == current.value:
+                    if current.left is None and current.right is None:
+                            self.root = None
+                            depth_node = None
+                            break
+                    elif current.left is None:
+                        self.root = current.right
+                        depth_node = self.root
+                    elif current.right is None:
+                        self.root = current.left
+                        depth_node = self.root
+                    else:
+                        new = self._findmax(current, current.left)
+                        if new[0] != current:
+                            new[0].right = None
+                            if new[1].left:
+                                new[0].right = new[1].left
+                        self.root = new[1]
+                        self.root.left = current.left
+                        self.root.right = current.right
+                        depth_node = self.root
+                        break
             except AttributeError:
                 break
-        print(current.value)
-        new_depth = self._depth_of_node(current) + self._depth_of_branch(current)
-        print(new_depth)
+        # print(self.breadth_first())
+        # print(current.value)
+        new_depth = self._depth_of_node(depth_node) + self._depth_of_branch(depth_node)
+        if direction == 'right':
+            self.right_depth = new_depth
+        else:
+            self.left_depth = new_depth
+
+
 
     def _findmax(self, remove, child):
         parent = remove
@@ -241,13 +283,14 @@ class Binary_Search_Tree(object):
         the_list = []
         depth = 0
         while current:
+            # print(current[0].value)
             current[0].left and the_list.append([current[0].left, current[1] + 1])
             current[0].right and the_list.append([current[0].right, current[1] + 1])
             depth = current[1]
-            current = the_list.pop(0)
-            print(the_list)
-            print(current[0].value)
-        return depth
+            try:
+                current = the_list.pop(0)
+            except IndexError:
+                return depth
 
 def wrapper(func, *args, **kwargs):
     """Creates a value for a function with a specific arguement called to it."""
@@ -275,6 +318,13 @@ if __name__ == '__main__':
     # print(Bullshit_tree.root.right.left.value)
     # print(timeit.timeit(wrapped1))
     # print(timeit.timeit(wrapped2))
-    Bullshit_tree.deletion(65)
+    print(Bullshit_tree.depth())
+    Bullshit_tree.deletion(75)
+    gen = Bullshit_tree.breadth_first()
+    array = []
+    while len(array) < len(data) - 1:
+        array.append(next(gen))
+
+    print(Bullshit_tree.depth())
     # print(Bullshit_tree.search(data[-1]))
 
