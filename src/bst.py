@@ -154,6 +154,51 @@ class Binary_Search_Tree(object):
             if len(the_list) > 0:
                 current = the_list.pop(0)
 
+    def deletion(self,value):
+        current = self.root
+        while True:
+            try:
+                if value > current.value:
+                    if value == current.right.value:
+                        if current.right is None and current.right.left is None:
+                            current.right = None
+                            break
+                        elif current.right.left is None:
+                            current.right = current.right.right
+                            break
+                        elif current.right.right is None:
+                            current.right = current.right.left
+                            break
+                        else:
+                            parent = current
+                            remove = parent.right
+                            new = ._findmax(remove, remove.left)
+                            new[0].right = None
+                            if new[1].left:
+                                new[0].right = new[1].left
+                            parent.right = new[1]
+                            new[1].left = remove.left
+                            new[1].right = remove.right
+                            break
+                    current = current.right
+                elif value < current.value:
+                    if value == current.left.value:
+                        pass
+                    current = current.left
+            except AttributeError:
+                break
+        reset_depth(x)
+
+    def _findmax(remove, child):
+        parent = remove
+        current = child
+        while current.right:
+            parent = current
+            current = current.right
+        return [parent, current]
+
+    def _depthcount(self, value):
+        """This needs work but we know we need it."""
 
 
 def wrapper(func, *args, **kwargs):
