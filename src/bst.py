@@ -157,10 +157,11 @@ class Binary_Search_Tree(object):
     def deletion(self,value):
         current = self.root
         while True:
+            print('looping')
             try:
                 if value > current.value:
                     if value == current.right.value:
-                        if current.right is None and current.right.left is None:
+                        if current.right.right is None and current.right.left is None:
                             current.right = None
                             break
                         elif current.right.left is None:
@@ -172,7 +173,7 @@ class Binary_Search_Tree(object):
                         else:
                             parent = current
                             remove = parent.right
-                            new = ._findmax(remove, remove.left)
+                            new = self._findmax(remove, remove.left)
                             new[0].right = None
                             if new[1].left:
                                 new[0].right = new[1].left
@@ -183,13 +184,34 @@ class Binary_Search_Tree(object):
                     current = current.right
                 elif value < current.value:
                     if value == current.left.value:
-                        pass
+                        if current.left.left is None and current.left.right is None:
+                            current.left = None
+                            break
+                        elif current.left.left is None:
+                            current.left = current.left.right
+                            break
+                        elif current.left.right is None:
+                            current.left = current.left.left
+                            break
+                        else:
+                            parent = current
+                            remove = parent.left
+                            new = self._findmax(remove, remove.left)
+                            new[0].right = None
+                            if new[1].left:
+                                new[0].right = new[1].left
+                            parent.right = new[1]
+                            new[1].left = remove.left
+                            new[1].right = remove.right
+                            break
                     current = current.left
             except AttributeError:
                 break
-        reset_depth(x)
+        print(current.value)
+        new_depth = self._depth_of_node(current) + self._depth_of_branch(current)
 
-    def _findmax(remove, child):
+
+    def _findmax(self, remove, child):
         parent = remove
         current = child
         while current.right:
@@ -197,8 +219,35 @@ class Binary_Search_Tree(object):
             current = current.right
         return [parent, current]
 
-    def _depthcount(self, value):
-        """This needs work but we know we need it."""
+
+    def _depth_of_node(self, node):
+        """Find the depth from top of tree to our node."""
+        current = self.root
+        depth = 0
+        try:
+            while True:
+                if node.value > current.value:
+                    current = current.right
+                elif node.value < current.value:
+                    current = current.left
+                elif node.value == current.value:
+                    return depth
+                depth += 1
+        except AttributeError:
+            return None
+
+
+    def _depth_of_branch(self, node):
+        """Find depth of our branch from our found node."""
+        current = [node, 0]
+        the_list = []
+        depth = 0
+        while current:
+            current[0].left and the_list.append([current[0].left, current[1] + 1])
+            current[0].right and the_list.append([current[0].right, current[1] + 1])
+            depth = current[1]
+            current = the_list.pop(0)
+        return depth
 
 
 def wrapper(func, *args, **kwargs):
@@ -227,10 +276,6 @@ if __name__ == '__main__':
     # print(Bullshit_tree.root.right.left.value)
     # print(timeit.timeit(wrapped1))
     # print(timeit.timeit(wrapped2))
-    thing = Bullshit_tree.in_order()
-    array = []
-    while len(array) < Bullshit_tree.size():
-        array.append(next(thing))
-        print(array)
+    Bullshit_tree.deletion(48)
     # print(Bullshit_tree.search(data[-1]))
 
