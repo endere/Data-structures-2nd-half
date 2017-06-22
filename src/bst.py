@@ -157,7 +157,6 @@ class Binary_Search_Tree(object):
     def deletion(self,value):
         current = self.root
         while True:
-            print('looping')
             try:
                 if value > current.value:
                     if value == current.right.value:
