@@ -72,24 +72,15 @@ class Binary_Search_Tree(object):
     def search(self, val):
         """Search binary tree for values."""
         current = self.root
-        # print('started at: ', current.value)
         try:
             while True:
                 if val > current.value:
-                    # print('went right!')
                     current = current.right
-                    # print(current.value)
                 elif val < current.value:
-                    # print('went left!')
                     current = current.left
-                    # print(current.value)
                 elif val == current.value:
-                    # print('found it!')
-                    # print(current.value)
                     return current
-                # print('---------------')
         except AttributeError:
-            # print('not here')
             return None
 
     def size(self):
@@ -117,7 +108,7 @@ class Binary_Search_Tree(object):
     def breadth_first(self):
         current = self.root
         the_list = []
-        for i in range(self.length):
+        while current:
             current.left and the_list.append(current.left)
             current.right and the_list.append(current.right)
             yield current.value
@@ -126,7 +117,7 @@ class Binary_Search_Tree(object):
     def pre_order(self):
         current = self.root
         the_list = []
-        for i in range(self.length):
+        while current:
             current.right and the_list.append(current.right)
             yield current.value
             if current.left:
@@ -135,17 +126,31 @@ class Binary_Search_Tree(object):
                 current = the_list.pop()
 
     def post_order(self):
-        pass
+        current = self.root
+        the_list = []
+        seen_parents = []
+        while current:
+            if current.left is None and current.right is None or current in seen_parents:
+                yield current.value
+            else:
+                the_list = [current.left, current.right, current] + the_list
+                the_list[:3] = [x for x in the_list[:3] if x is not None]
+                seen_parents.append(current)
+            if len(the_list) > 0:
+                current = the_list.pop(0)
 
 
     def in_order(self):
         current = self.root
         the_list = []
+        seen_parents = []
         while current:
-            if current.right and current.right in the_list or current.left is None and current.right is None:
+            if current.left is None and current.right is None or current in seen_parents:
                 yield current.value
             else:
+                seen_parents.append(current)
                 the_list = [current.left, current, current.right] + the_list
+                the_list[:3] = [x for x in the_list[:3] if x is not None]
             if len(the_list) > 0:
                 current = the_list.pop(0)
 
@@ -161,7 +166,7 @@ def wrapper(func, *args, **kwargs):
 if __name__ == '__main__':
     Bullshit_tree = Binary_Search_Tree()
     import random
-    data = [4, 2, 3, 6, 5, 1, 7]
+    data = [75, 97, 40, 7, 48, 65, 83, 27, 38, 1, 16, 86, 87, 100, 47, 53, 55, 54]
     print(data)
     for i in data:
         Bullshit_tree.insert(i)
