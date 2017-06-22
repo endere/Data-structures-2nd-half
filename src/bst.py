@@ -208,7 +208,7 @@ class Binary_Search_Tree(object):
                 break
         print(current.value)
         new_depth = self._depth_of_node(current) + self._depth_of_branch(current)
-
+        print(new_depth)
 
     def _findmax(self, remove, child):
         parent = remove
@@ -235,7 +235,6 @@ class Binary_Search_Tree(object):
         except AttributeError:
             return None
 
-
     def _depth_of_branch(self, node):
         """Find depth of our branch from our found node."""
         current = [node, 0]
@@ -246,8 +245,9 @@ class Binary_Search_Tree(object):
             current[0].right and the_list.append([current[0].right, current[1] + 1])
             depth = current[1]
             current = the_list.pop(0)
+            print(the_list)
+            print(current[0].value)
         return depth
-
 
 def wrapper(func, *args, **kwargs):
     """Creates a value for a function with a specific arguement called to it."""
@@ -275,6 +275,6 @@ if __name__ == '__main__':
     # print(Bullshit_tree.root.right.left.value)
     # print(timeit.timeit(wrapped1))
     # print(timeit.timeit(wrapped2))
-    Bullshit_tree.deletion(48)
+    Bullshit_tree.deletion(65)
     # print(Bullshit_tree.search(data[-1]))
 
