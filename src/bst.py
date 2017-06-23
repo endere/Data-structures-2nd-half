@@ -139,7 +139,6 @@ class Binary_Search_Tree(object):
             if len(the_list) > 0:
                 current = the_list.pop(0)
 
-
     def in_order(self):
         current = self.root
         the_list = []
@@ -154,7 +153,7 @@ class Binary_Search_Tree(object):
             if len(the_list) > 0:
                 current = the_list.pop(0)
 
-    def deletion(self,value):
+    def deletion(self, value):
         current = self.root
         if value > self.root.value:
             direction = 'right'
@@ -250,8 +249,6 @@ class Binary_Search_Tree(object):
         else:
             self.left_depth = new_depth
 
-
-
     def _findmax(self, remove, child):
         parent = remove
         current = child
@@ -259,7 +256,6 @@ class Binary_Search_Tree(object):
             parent = current
             current = current.right
         return [parent, current]
-
 
     def _depth_of_node(self, node):
         """Find the depth from top of tree to our node."""
@@ -292,6 +288,30 @@ class Binary_Search_Tree(object):
             except IndexError:
                 return depth
 
+    def update_balance(self, node):
+        sides = self._check_right_left_depths(node)
+        left_depth = sides[0]
+        right_depth = sides[1]
+        while right_depth - left_depth > 1:
+            self.left_rotation(node)
+            sides = self._check_right_left_depths(node)
+            left_depth = sides[0]
+            right_depth = sides[1]
+        while right_depth - left_depth < -1:
+            self.right_rotation(node)
+            sides = self._check_right_left_depths(node)
+            left_depth = sides[0]
+            right_depth = sides[1]
+
+    def _check_right_left_depths(self, node):
+        left_side = 0
+        right_side = 0
+        if node.right:
+            right_side = 1 + self._depth_of_branch(node.right)
+        if node.left:
+            left_side = 1 + self._depth_of_branch(node.left)
+        return (left_side, right_side)
+
 def wrapper(func, *args, **kwargs):
     """Creates a value for a function with a specific arguement called to it."""
     def wrapped():
@@ -302,7 +322,7 @@ def wrapper(func, *args, **kwargs):
 if __name__ == '__main__':
     Bullshit_tree = Binary_Search_Tree()
     import random
-    data = [75, 97, 40, 7, 48, 65, 83, 27, 38, 1, 16, 86, 87, 100, 47, 53, 55, 54]
+    data = [75, 97, 40, 7, 48, 65, 83, 27, 38, 1, 16, 86, 87, 100, 47, 53, 55, 54, 56, 57, 58, 59, 60]
     print(data)
     for i in data:
         Bullshit_tree.insert(i)
@@ -318,13 +338,16 @@ if __name__ == '__main__':
     # print(Bullshit_tree.root.right.left.value)
     # print(timeit.timeit(wrapped1))
     # print(timeit.timeit(wrapped2))
-    print(Bullshit_tree.depth())
     Bullshit_tree.deletion(75)
     gen = Bullshit_tree.breadth_first()
     array = []
     while len(array) < len(data) - 1:
         array.append(next(gen))
 
+    print('update', Bullshit_tree.update_balance())
     print(Bullshit_tree.depth())
+    print(Bullshit_tree.balance())
+
+
     # print(Bullshit_tree.search(data[-1]))
 
