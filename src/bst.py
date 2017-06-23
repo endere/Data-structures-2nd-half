@@ -140,6 +140,7 @@ class Binary_Search_Tree(object):
                 current = the_list.pop(0)
 
     def in_order(self):
+        """Get our bst back in order."""
         current = self.root
         the_list = []
         seen_parents = []
@@ -154,6 +155,7 @@ class Binary_Search_Tree(object):
                 current = the_list.pop(0)
 
     def deletion(self, value):
+        """Delete our nodes in our bst."""
         current = self.root
         if value > self.root.value:
             direction = 'right'
@@ -250,6 +252,7 @@ class Binary_Search_Tree(object):
             self.left_depth = new_depth
 
     def _findmax(self, remove, child):
+        """Finds the furthest right child of a node and returns it plus parent."""
         parent = remove
         current = child
         while current.right:
@@ -289,19 +292,14 @@ class Binary_Search_Tree(object):
                 return depth
 
     def update_balance(self, node):
+        """Updates our balance of the tree."""
         sides = self._check_right_left_depths(node)
-        left_depth = sides[0]
-        right_depth = sides[1]
-        while right_depth - left_depth > 1:
+        while sides[1] - sides[0] > 1:
             self.left_rotation(node)
             sides = self._check_right_left_depths(node)
-            left_depth = sides[0]
-            right_depth = sides[1]
-        while right_depth - left_depth < -1:
+        while sides[1] - sides[0] < -1:
             self.right_rotation(node)
             sides = self._check_right_left_depths(node)
-            left_depth = sides[0]
-            right_depth = sides[1]
 
     def _check_right_left_depths(self, node):
         left_side = 0
@@ -311,6 +309,15 @@ class Binary_Search_Tree(object):
         if node.left:
             left_side = 1 + self._depth_of_branch(node.left)
         return (left_side, right_side)
+
+    def right_rotation(self, node):
+        """Right rotation for rebalancing our tree."""
+        pass
+
+    def left_rotation(self, node):
+        """Left rotation for rebalancing our tree."""
+        pass
+
 
 def wrapper(func, *args, **kwargs):
     """Creates a value for a function with a specific arguement called to it."""
