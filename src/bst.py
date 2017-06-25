@@ -318,6 +318,86 @@ class Binary_Search_Tree(object):
         """Left rotation for rebalancing our tree."""
         pass
 
+    def print_tree(self):
+        current = [self.root, 0]
+        the_list = []
+        depth = 0
+        final = []
+        temp = []
+        lines = []
+        while current:
+            final.append([current[0].value, current[1]])
+            current[0].left and the_list.append([current[0].left, current[1] + 1])
+            current[0].right and the_list.append([current[0].right, current[1] + 1])
+            # if depth < current[1]:
+            #     # print(temp)
+            #     # print(lines)
+            #     temp = []
+            #     lines = []
+            # temp.append('   {}   '.format(current[0].value))
+            # if current[0].left and current[0].right:
+            #     lines.append(' {}  {} '.format(current[0].left.value, current[0].right.value))
+            # elif current[0].right:
+            #     lines.append('    {} '.format(current[0].right.value))
+            # elif current[0].left:
+            #     lines.append(' {}    '.format(current[0].left.value))
+            depth = current[1]
+            try:
+                current = the_list.pop(0)
+            except IndexError:
+                tree = [[]]
+                otherTree= []
+                for i in range(depth):
+                    tree.append([])
+                for i in final:
+                    tree[i[1]].append(i[0])
+                    # print(i[1])
+                longest = 0
+                for i in tree:
+                    print(i)
+                    if len(i) > longest:
+                        longest = len(i)
+                string = ' ' * 2 * longest
+                if longest % 2 == 0:
+                    longest += 1
+                midpoint = int(longest/2 + .5)
+                print(midpoint)
+                for i in range(longest*12):
+                    otherTree.append(' ')
+                curr = [self.root, 0, midpoint*8, 0]
+                depth = 0
+                current_level = midpoint
+                the_list = []
+                while curr:
+                    print(curr[0].value, 'has children: ', curr[0].left and curr[0].left.value, curr[0].right and curr[0].right.value)
+                    if otherTree[curr[2]].isspace():
+                        curr[2] += curr[3]
+                        curr[1] += 1
+                    print(curr[2])
+                    print('mid', midpoint)
+                    if curr[2] == midpoint*8 and curr[3] < 0:
+                        curr[2] += 1
+                    elif curr[2] == midpoint*8 and curr[3] > 0:
+                        curr[2] -= 1
+                    otherTree[curr[2]] += '  ' * curr[1] + str(curr[0].value)
+                    if curr[0].left:
+                        otherTree[curr[2] - 1] += ' ' * (len(otherTree[curr[2]]) - len(otherTree[curr[2]-1])) + '/' + (str(curr[0].left and curr[0].left.value))
+                    if curr[0].right:
+                        otherTree[curr[2] + 1] += ' ' * (len(otherTree[curr[2]]) - len(otherTree[curr[2]+1])) + '\\' + (str(curr[0].right and curr[0].right.value))
+                    # if curr[3] == '/':
+                    #     otherTree[curr[2] + 1] += ' ' * curr[1] + curr[3]
+                    # else:
+                    #     otherTree[curr[2] - 1] += ' ' * curr[1] + curr[3]
+
+                    curr[0].left and the_list.append([curr[0].left, curr[1] + 1, curr[2] -2, -3])
+                    curr[0].right and the_list.append([curr[0].right, curr[1] + 1, curr[2] + 2, 3])
+                    try:
+                        curr = the_list.pop(0)
+                    except IndexError:
+                        for i in otherTree:
+                            print(i)
+                        break
+                break
 
 def wrapper(func, *args, **kwargs):
     """Creates a value for a function with a specific arguement called to it."""
@@ -329,8 +409,9 @@ def wrapper(func, *args, **kwargs):
 if __name__ == '__main__':
     Bullshit_tree = Binary_Search_Tree()
     import random
-    data = [75, 97, 40, 7, 48, 65, 83, 27, 38, 1, 16, 86, 87, 100, 47, 53, 55, 54, 56, 57, 58, 59, 60]
-    print(data)
+    data = [75, 97, 40, 7, 48, 65, 83, 27, 38, 1, 16, 86, 87, 100, 47, 53, 55, 54]
+    # data = [4, 2, 6, 5, 9, 1, 3, 8, 7]
+    # print(data)
     for i in data:
         Bullshit_tree.insert(i)
     # wrapped1 = wrapper(Bullshit_tree.search, data[0])
@@ -345,15 +426,15 @@ if __name__ == '__main__':
     # print(Bullshit_tree.root.right.left.value)
     # print(timeit.timeit(wrapped1))
     # print(timeit.timeit(wrapped2))
-    Bullshit_tree.deletion(75)
+    # Bullshit_tree.deletion(4)
     gen = Bullshit_tree.breadth_first()
     array = []
     while len(array) < len(data) - 1:
         array.append(next(gen))
-
-    print('update', Bullshit_tree.update_balance())
-    print(Bullshit_tree.depth())
-    print(Bullshit_tree.balance())
+    # print(array)
+    # print('update', Bullshit_tree.update_balance())
+    # print(Bullshit_tree._check_right_left_depths(Bullshit_tree.root))
+    print(Bullshit_tree.print_tree())
 
 
     # print(Bullshit_tree.search(data[-1]))

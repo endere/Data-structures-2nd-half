@@ -165,10 +165,7 @@ def test_post_order(data, result):
     test_array = []
     test_generator = test_tree.post_order()
     while len(test_array) < test_tree.size():
-        # import pdb; pdb.set_trace()
         test_array.append(next(test_generator))
-    print('result is ', result)
-    print('test_array is ', test_array)
     assert test_array == result
 
 
