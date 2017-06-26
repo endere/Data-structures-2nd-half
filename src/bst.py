@@ -55,6 +55,7 @@ class Binary_Search_Tree(object):
                             if depth > self.left_depth:
                                 self.left_depth = depth
                         self.length += 1
+                        self.update_balance(current)
                     else:
                         current = current.right
                 else:
@@ -67,8 +68,10 @@ class Binary_Search_Tree(object):
                             if depth > self.left_depth:
                                 self.left_depth = depth
                         self.length += 1
+                        self.update_balance(current)
                     else:
                         current = current.left
+
 
     def search(self, val):
         """Search binary tree for values."""
@@ -263,6 +266,7 @@ class Binary_Search_Tree(object):
                 break
         # print(self.breadth_first())
         # print(current.value)
+        self.update_balance(depth_node)
         new_depth = self._depth_of_node(depth_node) + self._depth_of_branch(depth_node)
         if direction == 'right':
             self.right_depth = new_depth
@@ -300,7 +304,7 @@ class Binary_Search_Tree(object):
         the_list = []
         depth = 0
         while current:
-            # print(current[0].value)
+            print(current[0].value)
             # print(current[0].right.value)
             current[0].left and the_list.append([current[0].left, current[1] + 1])
             current[0].right and the_list.append([current[0].right, current[1] + 1])
@@ -315,12 +319,30 @@ class Binary_Search_Tree(object):
         if node is None:
             node = self.root
         sides = self._check_right_left_depths(node)
-        while sides[1] - sides[0] > 1:
-            self.left_rotation(node.right)
-            sides = self._check_right_left_depths(node)
-        while sides[1] - sides[0] < -1:
-            self.right_rotation(node.left)
-            sides = self._check_right_left_depths(node)
+        print("------------------")
+        print(self.root.value)
+        # while sides[1] - sides[0] > 1:
+        #     self.left_rotation(node.right)
+        #     sides = self._check_right_left_depths(node)
+        # while sides[1] - sides[0] < -1:
+        #     self.right_rotation(node.left)
+        #     sides = self._check_right_left_depths(node)
+        if sides[1] - sides[0] > 1:  # for right side being heavier
+            child_sides = self._check_right_left_depths(node.right)
+            if child_sides[1] - child_sides[0] < 0:
+                self.left_rotation(node.right)
+                self.right_rotation(node)
+            else:
+                self.right_rotation(node)
+        elif sides[1] - sides[0] < 1:  # for the left side being heavier
+            child_sides = self._check_right_left_depths(node.left)
+            if child_sides[1] - child_sides[0] > 0:
+                self.right_rotation(node.left)
+                self.left_rotation(node.right)
+            else:
+                self.left_rotation(node)
+        # if node is not self.root:
+        #     self.update_balance(node.parent)
 
     def _check_right_left_depths(self, node):
         left_side = 0
@@ -339,8 +361,11 @@ class Binary_Search_Tree(object):
             z = node.parent
         else:
             z = None
-        print(y.value)
-        print(x.value)
+        print(x.value, y.value, z.value)
+        print("++++++++++++++++")
+        # print(y.value)
+        # print(x.value)
+        print(node.value)
         if y.left and y.right:
             self.right_rotation(y)
         elif y.left and x is not self.root:
@@ -365,8 +390,9 @@ class Binary_Search_Tree(object):
             z = node.parent
         else:
             z = None
+        print(x.value, y.value, z.value)
         if y.left and y.right:
-            self.right_rotation(y)
+            self.left_rotation(y)
         elif y.left and x is not self.root:
             x.left = y.left
             x.left.parent = x
@@ -480,7 +506,7 @@ def wrapper(func, *args, **kwargs):
 if __name__ == '__main__':
     Bullshit_tree = Binary_Search_Tree()
     import random
-    data = [10, 30, 20, 25]
+    data = [10, 30, 20]
     # data = [75, 97, 40, 7, 48, 65, 83, 27, 38, 1, 16, 86, 87, 100, 47, 53, 55, 54]
     # data = [4, 2, 6, 5, 9, 1, 3, 8, 7]
     # print(data)
@@ -508,9 +534,9 @@ if __name__ == '__main__':
     # print('update', Bullshit_tree.update_balance())
     # print(Bullshit_tree._check_right_left_depths(Bullshit_tree.root))
     # Bullshit_tree.update_balance()
-    print(Bullshit_tree.print_tree())
+    # print(Bullshit_tree.print_tree())
     # Bullshit_tree.update_balance()
-    Bullshit_tree.left_rotation(Bullshit_tree.root.right)
+    # Bullshit_tree.left_rotation(Bullshit_tree.root.right)
     print(Bullshit_tree.print_tree())
 
 
