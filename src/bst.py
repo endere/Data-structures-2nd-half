@@ -56,6 +56,7 @@ class Binary_Search_Tree(object):
                                 self.left_depth = depth
                         self.length += 1
                         self.update_balance(current)
+                        break
                     else:
                         current = current.right
                 else:
@@ -69,6 +70,7 @@ class Binary_Search_Tree(object):
                                 self.left_depth = depth
                         self.length += 1
                         self.update_balance(current)
+                        break
                     else:
                         current = current.left
 
@@ -304,7 +306,7 @@ class Binary_Search_Tree(object):
         the_list = []
         depth = 0
         while current:
-            print(current[0].value)
+            # print(current[0].value)
             # print(current[0].right.value)
             current[0].left and the_list.append([current[0].left, current[1] + 1])
             current[0].right and the_list.append([current[0].right, current[1] + 1])
@@ -316,11 +318,14 @@ class Binary_Search_Tree(object):
 
     def update_balance(self, node=None):
         """Updates our balance of the tree."""
+        # self.print_tree()
         if node is None:
             node = self.root
         sides = self._check_right_left_depths(node)
-        print("------------------")
-        print(self.root.value)
+        # print('--------')
+        # print('current, node ',node.value)
+        # print('left side: ', sides[0])
+        # print('right side: ', sides[1])
         # while sides[1] - sides[0] > 1:
         #     self.left_rotation(node.right)
         #     sides = self._check_right_left_depths(node)
@@ -330,19 +335,27 @@ class Binary_Search_Tree(object):
         if sides[1] - sides[0] > 1:  # for right side being heavier
             child_sides = self._check_right_left_depths(node.right)
             if child_sides[1] - child_sides[0] < 0:
-                self.left_rotation(node.right)
-                self.right_rotation(node)
+                print('spot A')
+                node = self.double_rotate_right_left(node)
+
             else:
-                self.right_rotation(node)
-        elif sides[1] - sides[0] < 1:  # for the left side being heavier
+                print('spot B')
+                node = self.left_rotation(node)
+
+        elif sides[1] - sides[0] < -1:  # for the left side being heavier
             child_sides = self._check_right_left_depths(node.left)
             if child_sides[1] - child_sides[0] > 0:
-                self.right_rotation(node.left)
-                self.left_rotation(node.right)
+                print('spot C')
+                print(node.value)
+
+                node = self.double_rotate_left_right(node)
             else:
-                self.left_rotation(node)
-        # if node is not self.root:
-        #     self.update_balance(node.parent)
+                print('spot F')
+
+                node = self.right_rotation(node)
+
+        if node is not self.root:
+            self.update_balance(node.parent)
 
     def _check_right_left_depths(self, node):
         left_side = 0
@@ -354,62 +367,127 @@ class Binary_Search_Tree(object):
         return (left_side, right_side)
 
     def right_rotation(self, node):
-        """Right rotation for rebalancing our tree."""
-        x = node
-        y = node.right
-        if node.parent:
-            z = node.parent
+        n2 = node
+        k = n2.left
+        n2.left = k.right
+        if n2.left:
+            n2.left.parent = n2
+        k.parent = n2.parent
+        if n2.parent is None:
+            k.parent = None
+            self.root = k
+        elif n2.parent.left == n2:
+            n2.parent.left = k
         else:
-            z = None
-        print(x.value, y.value, z.value)
-        print("++++++++++++++++")
-        # print(y.value)
-        # print(x.value)
-        print(node.value)
-        if y.left and y.right:
-            self.right_rotation(y)
-        elif y.left and x is not self.root:
-            x.right = y.left
-        elif y.right and x is not self.root:
-            x.right = y.right
-        else:
-            x.right = None
-        x.parent = y
-        y.left = x
-        y.parent = z
-        if z is None:
-            self.root = y
-        if z:
-            z.left = y
+            n2.parent.right = k
+        k.right = n2
+        k.right.parent = k
+        return k
 
     def left_rotation(self, node):
-        """Left rotation for rebalancing our tree."""
-        x = node
-        y = node.left
-        if node.parent:
-            z = node.parent
+        n2 = node
+        k = n2.right
+        n2.right = k.left
+        if n2.right:
+            n2.right.parent = n2
+        k.parent = n2.parent
+        if n2.parent is None:
+            k.parent = None
+            self.root = k
+        elif n2.parent.right == n2:
+            n2.parent.right = k
         else:
-            z = None
-        print(x.value, y.value, z.value)
-        if y.left and y.right:
-            self.left_rotation(y)
-        elif y.left and x is not self.root:
-            x.left = y.left
-            x.left.parent = x
-        elif y.right and x is not self.root:
-            x.left = y.right
-            x.left.parent = x
-        else:
-            x.left = None
-        x.parent = y
-        y.right = x
-        y.parent = z
-        if z is None:
-            self.root = y
-        if z:
-            z.right = y
-            # self.update_balance(z)
-        # print(x.left.value, y.left.value)
+            n2.parent.left = k          
+        k.left = n2
+        k.left.parent = k
+
+        return k
+
+    def double_rotate_left_right(self, node):
+        node.left = self.left_rotation(node.left)
+        k = self.right_rotation(node)
+        return k
+
+    def double_rotate_right_left(self, node):
+        print(node.value)
+        # self.print_tree()
+        node.right = self.right_rotation(node.right)
+        # self.print_tree()
+        k = self.left_rotation(node)
+        # self.print_tree()
+        return k
+    # def right_rotation(self, node):
+    #     """Right rotation for rebalancing our tree."""
+    #     print('right rotation at: ', node.value)
+    #     x = node
+    #     y = node.right
+    #     if node.parent:
+    #         z = node.parent
+    #     else:
+    #         z = None
+    #     # print(y.value)
+    #     # print(x.value)
+    #     # print(node.value)
+    #     if y.left and y.right:
+    #         # self.print_tree()
+    #         print('x is: ', x.value)
+    #         print('y is: ', y.value)
+
+    #         print('z is: ', z.value)
+    #         print('the offending children are: ', y.left.value, y.right.value)
+
+    #         print('overrr in the right rotations')
+    #         self.left_rotation(y)
+    #     elif y.left and x is not self.root:
+    #         x.right = y.left
+    #         x.right.parent = x
+    #         y.left = None
+    #     elif y.right and x is not self.root:
+    #         x.right = y.right
+    #         x.right.parent = x
+    #         y.right = None
+    #     else:
+    #         x.right = None
+    #     x.parent = y
+    #     y.left = x
+    #     y.parent = z
+    #     if z is None:
+    #         self.root = y
+    #     if z:
+    #         z.left = y
+
+    # def left_rotation(self, node):
+    #     """Left rotation for rebalancing our tree."""
+    #     print('left rotation at: ', node.value)
+    #     # print(self.print_tree())
+    #     x = node
+    #     y = node.left
+    #     if node.parent:
+    #         z = node.parent
+    #     else:
+    #         z = None
+    #     if y.left and y.right:
+    #         self.right_rotation(y)
+    #     elif y.left and x is not self.root:
+    #         x.left = y.left
+    #         x.left.parent = x
+    #         y.left = None
+    #     elif y.right and x is not self.root:
+    #         x.left = y.right
+    #         x.left.parent = x
+    #         y.right = None
+    #     else:
+    #         x.left = None
+    #     x.parent = y
+    #     y.right = x
+    #     y.parent = z
+    #     if z is None:
+    #         self.root = y
+    #     if z:
+    #         z.right = y
+    #         # self.update_balance(z)
+    #     # print(x.left.value, y.left.value)
+    #     # print(self.print_tree())
 
     def print_tree(self):
         current = [self.root, 0]
@@ -506,11 +584,12 @@ def wrapper(func, *args, **kwargs):
 if __name__ == '__main__':
     Bullshit_tree = Binary_Search_Tree()
     import random
-    data = [10, 30, 20]
-    # data = [75, 97, 40, 7, 48, 65, 83, 27, 38, 1, 16, 86, 87, 100, 47, 53, 55, 54]
+    # data = [10, 30, 20]
+    data = [75, 97, 40, 7, 48, 65, 83, 27, 38, 1, 101, 1001, 110, 111, 112, 114, 113, 16, 86, 87, 100, 47, 53, 55, 54]
     # data = [4, 2, 6, 5, 9, 1, 3, 8, 7]
     # print(data)
     for i in data:
+        # import pdb; pdb.set_trace()
         Bullshit_tree.insert(i)
     # wrapped1 = wrapper(Bullshit_tree.search, data[0])
     # wrapped2 = wrapper(Bullshit_tree.search, data[-1])
@@ -524,12 +603,13 @@ if __name__ == '__main__':
     # print(Bullshit_tree.root.right.left.value)
     # print(timeit.timeit(wrapped1))
     # print(timeit.timeit(wrapped2))
-    # Bullshit_tree.deletion(4)
+    # Bullshit_tree.deletion(65)
     gen = Bullshit_tree.breadth_first()
     array = []
     while len(array) < len(data) - 1:
         array.append(next(gen))
     print(array)
+    print(Bullshit_tree._check_right_left_depths(Bullshit_tree.root))
     # print(array)
     # print('update', Bullshit_tree.update_balance())
     # print(Bullshit_tree._check_right_left_depths(Bullshit_tree.root))
