@@ -27,34 +27,67 @@ class Binary_Search_Tree(object):
         self.right_depth = 0
         self.left_depth = 0
 
+    # def insert(self, val):
+    #     """Insert a node for start and for right and left."""
+    #     if type(val) not in [float, int]:
+    #         raise TypeError('Numbers only >:(')
+    #     if self.root is None:
+    #         self.root = Node(val)
+    #         self.length += 1
+    #     else:
+    #         if val > self.root.value:
+    #             direction = 'right'
+    #         else:
+    #             direction = 'left'
+    #         current = self.root
+    #         depth = 0
+    #         while current:
+    #             depth += 1
+    #             if val == current.value:
+    #                 break
+    #             if val > current.value:
+    #                 if current.right is None:
+    #                     current.right = Node(val, current)
+    #                     if direction == 'right':
+    #                         if depth > self.right_depth:
+    #                             self.right_depth = depth
+    #                     else:
+    #                         if depth > self.left_depth:
+    #                             self.left_depth = depth
+    #                     self.length += 1
+    #                     self.update_balance(current)
+    #                     break
+    #                 else:
+    #                     current = current.right
+    #             else:
+    #                 if current.left is None:
+    #                     current.left = Node(val, current)
+    #                     if direction == 'right':
+    #                         if depth > self.right_depth:
+    #                             self.right_depth = depth
+    #                     else:
+    #                         if depth > self.left_depth:
+    #                             self.left_depth = depth
+    #                     self.length += 1
+    #                     self.update_balance(current)
+    #                     break
+    #                 else:
+    #                     current = current.left
+
     def insert(self, val):
         """Insert a node for start and for right and left."""
         if type(val) not in [float, int]:
             raise TypeError('Numbers only >:(')
         if self.root is None:
             self.root = Node(val)
-            self.length += 1
         else:
-            if val > self.root.value:
-                direction = 'right'
-            else:
-                direction = 'left'
             current = self.root
-            depth = 0
             while current:
-                depth += 1
                 if val == current.value:
                     break
                 if val > current.value:
                     if current.right is None:
                         current.right = Node(val, current)
-                        if direction == 'right':
-                            if depth > self.right_depth:
-                                self.right_depth = depth
-                        else:
-                            if depth > self.left_depth:
-                                self.left_depth = depth
-                        self.length += 1
                         self.update_balance(current)
                         break
                     else:
@@ -62,18 +95,10 @@ class Binary_Search_Tree(object):
                 else:
                     if current.left is None:
                         current.left = Node(val, current)
-                        if direction == 'right':
-                            if depth > self.right_depth:
-                                self.right_depth = depth
-                        else:
-                            if depth > self.left_depth:
-                                self.left_depth = depth
-                        self.length += 1
                         self.update_balance(current)
                         break
                     else:
                         current = current.left
-
 
     def search(self, val):
         """Search binary tree for values."""
@@ -91,15 +116,18 @@ class Binary_Search_Tree(object):
 
     def size(self):
         """Return length of size."""
-        return self.length
+        gen = self.breadth_first()
+        array = []
+        while True:
+            array.append(next(gen))
+            if array[-1] is None:
+                break
+        return len(array[:-1])
 
     def depth(self):
         """Return depth of left and right binary search tree."""
-        if self.right_depth > self.left_depth:
-            return self.right_depth
-        else:
-            return self.left_depth
-
+        return self._depth_of_branch(self.root)
+        
     def contains(self, value):
         """Return True if value is there and False if not."""
         if self.search(value):
@@ -109,7 +137,8 @@ class Binary_Search_Tree(object):
 
     def balance(self):
         """Return our balance for our binary search tree."""
-        return self.right_depth - self.left_depth
+        sides = self._check_right_left_depths(self.root)
+        return sides[1] - sides[0]
 
     def breadth_first(self):
         current = self.root
@@ -118,7 +147,10 @@ class Binary_Search_Tree(object):
             current.left and the_list.append(current.left)
             current.right and the_list.append(current.right)
             yield current.value
-            current = the_list.pop(0)
+            try:
+                current = the_list.pop(0)
+            except IndexError:
+                yield None
 
     def pre_order(self):
         current = self.root
@@ -196,8 +228,6 @@ class Binary_Search_Tree(object):
                                     new[0].right.parent = new[0]
                             parent.right = new[1]
                             new[1].parent = parent
-                            # new[1].left = remove.left
-                            # new[1].left.parent = new[1]
                             new[1].right = remove.right
                             new[1].right.parent = new[1]
                             depth_node = current
@@ -232,8 +262,6 @@ class Binary_Search_Tree(object):
                             parent.right = parent
                             new[1].left = remove.left
                             new[1].left.parent = new[1]
-                            # new[1].right = remove.right
-                            # new[1].right.parent = new[1]
                             depth_node = current
                             break
                     current = current.left
@@ -266,14 +294,12 @@ class Binary_Search_Tree(object):
                         break
             except AttributeError:
                 break
-        # print(self.breadth_first())
-        # print(current.value)
         self.update_balance(depth_node)
-        new_depth = self._depth_of_node(depth_node) + self._depth_of_branch(depth_node)
-        if direction == 'right':
-            self.right_depth = new_depth
-        else:
-            self.left_depth = new_depth
+        # new_depth = self._depth_of_node(depth_node) + self._depth_of_branch(depth_node)
+        # if direction == 'right':
+        #     self.right_depth = new_depth
+        # else:
+        #     self.left_depth = new_depth
 
     def _findmax(self, remove, child):
         """Finds the furthest right child of a node and returns it plus parent."""
@@ -306,8 +332,6 @@ class Binary_Search_Tree(object):
         the_list = []
         depth = 0
         while current:
-            # print(current[0].value)
-            # print(current[0].right.value)
             current[0].left and the_list.append([current[0].left, current[1] + 1])
             current[0].right and the_list.append([current[0].right, current[1] + 1])
             depth = current[1]
@@ -318,39 +342,24 @@ class Binary_Search_Tree(object):
 
     def update_balance(self, node=None):
         """Updates our balance of the tree."""
-        # self.print_tree()
+
         if node is None:
             node = self.root
         sides = self._check_right_left_depths(node)
-        # print('--------')
-        # print('current, node ',node.value)
-        # print('left side: ', sides[0])
-        # print('right side: ', sides[1])
-        # while sides[1] - sides[0] > 1:
-        #     self.left_rotation(node.right)
-        #     sides = self._check_right_left_depths(node)
-        # while sides[1] - sides[0] < -1:
-        #     self.right_rotation(node.left)
-        #     sides = self._check_right_left_depths(node)
         if sides[1] - sides[0] > 1:  # for right side being heavier
             child_sides = self._check_right_left_depths(node.right)
             if child_sides[1] - child_sides[0] < 0:
-                print('spot A')
                 node = self.double_rotate_right_left(node)
 
             else:
-                print('spot B')
                 node = self.left_rotation(node)
 
         elif sides[1] - sides[0] < -1:  # for the left side being heavier
             child_sides = self._check_right_left_depths(node.left)
             if child_sides[1] - child_sides[0] > 0:
-                print('spot C')
-                print(node.value)
 
                 node = self.double_rotate_left_right(node)
             else:
-                print('spot F')
 
                 node = self.right_rotation(node)
 
@@ -410,84 +419,9 @@ class Binary_Search_Tree(object):
 
     def double_rotate_right_left(self, node):
         print(node.value)
-        # self.print_tree()
         node.right = self.right_rotation(node.right)
-        # self.print_tree()
         k = self.left_rotation(node)
-        # self.print_tree()
         return k
-    # def right_rotation(self, node):
-    #     """Right rotation for rebalancing our tree."""
-    #     print('right rotation at: ', node.value)
-    #     x = node
-    #     y = node.right
-    #     if node.parent:
-    #         z = node.parent
-    #     else:
-    #         z = None
-    #     # print(y.value)
-    #     # print(x.value)
-    #     # print(node.value)
-    #     if y.left and y.right:
-    #         # self.print_tree()
-    #         print('x is: ', x.value)
-    #         print('y is: ', y.value)
-
-    #         print('z is: ', z.value)
-    #         print('the offending children are: ', y.left.value, y.right.value)
-
-    #         print('overrr in the right rotations')
-    #         self.left_rotation(y)
-    #     elif y.left and x is not self.root:
-    #         x.right = y.left
-    #         x.right.parent = x
-    #         y.left = None
-    #     elif y.right and x is not self.root:
-    #         x.right = y.right
-    #         x.right.parent = x
-    #         y.right = None
-    #     else:
-    #         x.right = None
-    #     x.parent = y
-    #     y.left = x
-    #     y.parent = z
-    #     if z is None:
-    #         self.root = y
-    #     if z:
-    #         z.left = y
-
-    # def left_rotation(self, node):
-    #     """Left rotation for rebalancing our tree."""
-    #     print('left rotation at: ', node.value)
-    #     # print(self.print_tree())
-    #     x = node
-    #     y = node.left
-    #     if node.parent:
-    #         z = node.parent
-    #     else:
-    #         z = None
-    #     if y.left and y.right:
-    #         self.right_rotation(y)
-    #     elif y.left and x is not self.root:
-    #         x.left = y.left
-    #         x.left.parent = x
-    #         y.left = None
-    #     elif y.right and x is not self.root:
-    #         x.left = y.right
-    #         x.left.parent = x
-    #         y.right = None
-    #     else:
-    #         x.left = None
-    #     x.parent = y
-    #     y.right = x
-    #     y.parent = z
-    #     if z is None:
-    #         self.root = y
-    #     if z:
-    #         z.right = y
-    #         # self.update_balance(z)
-    #     # print(x.left.value, y.left.value)
-    #     # print(self.print_tree())
 
     def print_tree(self):
         current = [self.root, 0]
@@ -501,18 +435,6 @@ class Binary_Search_Tree(object):
             final.append([current[0].value, current[1]])
             current[0].left and the_list.append([current[0].left, current[1] + 1])
             current[0].right and the_list.append([current[0].right, current[1] + 1])
-            # if depth < current[1]:
-            #     # print(temp)
-            #     # print(lines)
-            #     temp = []
-            #     lines = []
-            # temp.append('   {}   '.format(current[0].value))
-            # if current[0].left and current[0].right:
-            #     lines.append(' {}  {} '.format(current[0].left.value, current[0].right.value))
-            # elif current[0].right:
-            #     lines.append('    {} '.format(current[0].right.value))
-            # elif current[0].left:
-            #     lines.append(' {}    '.format(current[0].left.value))
             depth = current[1]
             try:
                 current = the_list.pop(0)
@@ -585,12 +507,30 @@ if __name__ == '__main__':
     Bullshit_tree = Binary_Search_Tree()
     import random
     # data = [10, 30, 20]
-    data = [75, 97, 40, 7, 48, 65, 83, 27, 38, 1, 101, 1001, 110, 111, 112, 114, 113, 16, 86, 87, 100, 47, 53, 55, 54]
+    # data = [75, 97, 40, 7, 48, 65, 83, 27, 38, 1, 101, 1001, 110, 111, 112, 114, 113, 16, 86, 87, 100, 47, 53, 55, 54]
     # data = [4, 2, 6, 5, 9, 1, 3, 8, 7]
+    # data = [1, 2, 3, 4, 5, 6, 7]
+    # print(data)
+    # data = random.sample(range(1, 100), 50)
+    data = [75, 97, 40, 7, 48, 65, 83, 27, 38, 1, 16, 86, 87, 100, 47, 53, 55, 54]
+    # for i in range(len(data)):
+    #     data.append(i)
     # print(data)
     for i in data:
-        # import pdb; pdb.set_trace()
         Bullshit_tree.insert(i)
+    Bullshit_tree.print_tree()
+    print('depth is ', Bullshit_tree.depth())
+    print('balance is ', Bullshit_tree.balance())
+    print('size is ', Bullshit_tree.size())
+    Bullshit_tree.deletion(48)
+    Bullshit_tree.print_tree()
+
+    gen = Bullshit_tree.in_order()
+    array = []
+    while len(array) < len(data):
+        array.append(next(gen))
+    print(array)
+
     # wrapped1 = wrapper(Bullshit_tree.search, data[0])
     # wrapped2 = wrapper(Bullshit_tree.search, data[-1])
     # print(Bullshit_tree.size())
@@ -604,12 +544,12 @@ if __name__ == '__main__':
     # print(timeit.timeit(wrapped1))
     # print(timeit.timeit(wrapped2))
     # Bullshit_tree.deletion(65)
-    gen = Bullshit_tree.breadth_first()
-    array = []
-    while len(array) < len(data) - 1:
-        array.append(next(gen))
-    print(array)
-    print(Bullshit_tree._check_right_left_depths(Bullshit_tree.root))
+    # gen = Bullshit_tree.breadth_first()
+    # array = []
+    # while len(array) < len(data):
+    #     array.append(next(gen))
+    # print(array)
+    # print(Bullshit_tree._check_right_left_depths(Bullshit_tree.root))
     # print(array)
     # print('update', Bullshit_tree.update_balance())
     # print(Bullshit_tree._check_right_left_depths(Bullshit_tree.root))
@@ -617,8 +557,9 @@ if __name__ == '__main__':
     # print(Bullshit_tree.print_tree())
     # Bullshit_tree.update_balance()
     # Bullshit_tree.left_rotation(Bullshit_tree.root.right)
-    print(Bullshit_tree.print_tree())
-
+    # print(Bullshit_tree.print_tree())
+    # print(Bullshit_tree.depth())
+    # print(Bullshit_tree.size())
 
     # print(Bullshit_tree.search(data[-1]))
 
