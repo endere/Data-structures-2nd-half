@@ -1,19 +1,19 @@
-
 """The binary search tree data structure."""
-import timeit
+
 
 class Node(object):
-    """I am a Node."""
+    """Create a node object that points to a parent, left child, and right child."""
 
-    def __init__(self, value):
+    def __init__(self, value, parent=None):
         """Init for our nodes."""
         self.value = value
+        self.parent = parent
         self.left = None
         self.right = None
 
 
-class Binary_Search_Tree(object):
-    """I am a search tree."""
+class BinarySearchTree(object):
+    """Create a Binary Search Tree Object."""
 
     def __init__(self, iterable=None):
         """Init for our BST."""
@@ -34,38 +34,24 @@ class Binary_Search_Tree(object):
             self.root = Node(val)
             self.length += 1
         else:
-            if val > self.root.value:
-                direction = 'right'
-            else:
-                direction = 'left'
             current = self.root
-            depth = 0
             while current:
-                depth += 1
                 if val == current.value:
                     break
                 if val > current.value:
                     if current.right is None:
-                        current.right = Node(val)
-                        if direction == 'right':
-                            if depth > self.right_depth:
-                                self.right_depth = depth
-                        else:
-                            if depth > self.left_depth:
-                                self.left_depth = depth
+                        current.right = Node(val, current)
+                        self.update_balance(current)
                         self.length += 1
+                        break
                     else:
                         current = current.right
                 else:
                     if current.left is None:
-                        current.left = Node(val)
-                        if direction == 'right':
-                            if depth > self.right_depth:
-                                self.right_depth = depth
-                        else:
-                            if depth > self.left_depth:
-                                self.left_depth = depth
+                        current.left = Node(val, current)
+                        self.update_balance(current)
                         self.length += 1
+                        break
                     else:
                         current = current.left
 
@@ -89,10 +75,7 @@ class Binary_Search_Tree(object):
 
     def depth(self):
         """Return depth of left and right binary search tree."""
-        if self.right_depth > self.left_depth:
-            return self.right_depth
-        else:
-            return self.left_depth
+        return self._depth_of_branch(self.root)
 
     def contains(self, value):
         """Return True if value is there and False if not."""
@@ -103,18 +86,24 @@ class Binary_Search_Tree(object):
 
     def balance(self):
         """Return our balance for our binary search tree."""
-        return self.right_depth - self.left_depth
+        sides = self._check_right_left_depths(self.root)
+        return sides[1] - sides[0]
 
     def breadth_first(self):
+        """Generator function that yields values from tree in breadth first order."""
         current = self.root
         the_list = []
         while current:
             current.left and the_list.append(current.left)
             current.right and the_list.append(current.right)
             yield current.value
-            current = the_list.pop(0)
+            try:
+                current = the_list.pop(0)
+            except IndexError:
+                yield None
 
     def pre_order(self):
+        """Generator function that yields values from tree in pre order."""
         current = self.root
         the_list = []
         while current:
@@ -126,6 +115,7 @@ class Binary_Search_Tree(object):
                 current = the_list.pop()
 
     def post_order(self):
+        """Generator function that yields values from tree in post order."""
         current = self.root
         the_list = []
         seen_parents = []
@@ -139,8 +129,9 @@ class Binary_Search_Tree(object):
             if len(the_list) > 0:
                 current = the_list.pop(0)
 
-
     def in_order(self):
+        """Generator function that yields values from tree in order."""
+        """Get our bst back in order."""
         current = self.root
         the_list = []
         seen_parents = []
@@ -154,7 +145,8 @@ class Binary_Search_Tree(object):
             if len(the_list) > 0:
                 current = the_list.pop(0)
 
-    def deletion(self,value):
+    def deletion(self, value):
+        """Delete our nodes in our bst."""
         current = self.root
         if value > self.root.value:
             direction = 'right'
@@ -162,21 +154,26 @@ class Binary_Search_Tree(object):
             direction = 'left'
         while True:
             try:
-                if value > current.value:
-                    if value == current.right.value:
+                if value > current.value:  # going down the right side of our tree
+                    if value == current.right.value:  # case for just one node with no children
                         if current.right.right is None and current.right.left is None:
                             current.right = None
                             depth_node = current
+                            self.length -= 1
                             break
-                        elif current.right.left is None:
+                        elif current.right.left is None:  # case for just one child right not left
                             current.right = current.right.right
+                            current.right.parent = current
                             depth_node = current
+                            self.length -= 1
                             break
-                        elif current.right.right is None:
+                        elif current.right.right is None:  # case for just one child left not right
                             current.right = current.right.left
+                            current.right.parent = current
                             depth_node = current
+                            self.length -= 1
                             break
-                        else:
+                        else:  # case for two children left and then right most
                             parent = current
                             remove = parent.right
                             new = self._findmax(remove, remove.left)
@@ -184,51 +181,67 @@ class Binary_Search_Tree(object):
                                 new[0].right = None
                                 if new[1].left:
                                     new[0].right = new[1].left
+                                    new[0].right.parent = new[0]
                             parent.right = new[1]
-                            new[1].left = remove.left
+                            new[1].parent = parent
                             new[1].right = remove.right
+                            new[1].right.parent = new[1]
                             depth_node = current
+                            self.length -= 1
                             break
                     current = current.right
-                elif value < current.value:
+                elif value < current.value:  # going down the left side of our tree
                     if value == current.left.value:
                         if current.left.left is None and current.left.right is None:
                             current.left = None
                             depth_node = current
+                            self.length -= 1
                             break
                         elif current.left.left is None:
                             current.left = current.left.right
+                            current.left.parent = current
                             depth_node = current
+                            self.length -= 1
                             break
                         elif current.left.right is None:
                             current.left = current.left.left
+                            current.left.parent = current 
                             depth_node = current
+                            self.length -= 1
                             break
                         else:
                             parent = current
                             remove = parent.left
-                            new = self._findmax(remove, remove.left)
+                            new = self._findmax(remove, remove.right)
                             if new[0] != remove:
                                 new[0].right = None
                                 if new[1].left:
                                     new[0].right = new[1].left
+                                    new[0].right.parent = new[0]
                             parent.right = new[1]
+                            new[1].parent = parent
                             new[1].left = remove.left
-                            new[1].right = remove.right
+                            new[1].left.parent = new[1]
                             depth_node = current
+                            self.length -= 1
                             break
                     current = current.left
                 elif value == current.value:
                     if current.left is None and current.right is None:
                             self.root = None
                             depth_node = None
+                            self.length -= 1
                             break
                     elif current.left is None:
                         self.root = current.right
+                        self.root.parent = None 
                         depth_node = self.root
+                        self.length -= 1
                     elif current.right is None:
                         self.root = current.left
+                        self.root.parent = None
                         depth_node = self.root
+                        self.length -= 1
                     else:
                         new = self._findmax(current, current.left)
                         if new[0] != current:
@@ -236,30 +249,28 @@ class Binary_Search_Tree(object):
                             if new[1].left:
                                 new[0].right = new[1].left
                         self.root = new[1]
-                        self.root.left = current.left
-                        self.root.right = current.right
+                        if new[1] != current.left:
+                            self.root.left = current.left
+                            self.root.left.parent = self.root
+                        if new[1] != current.right:  
+                            self.root.right = current.right
+                            self.root.right.parent = self.root
+                        self.root.parent = None
                         depth_node = self.root
+                        self.length -= 1
                         break
             except AttributeError:
                 break
-        # print(self.breadth_first())
-        # print(current.value)
-        new_depth = self._depth_of_node(depth_node) + self._depth_of_branch(depth_node)
-        if direction == 'right':
-            self.right_depth = new_depth
-        else:
-            self.left_depth = new_depth
-
-
+        self.update_balance(depth_node)
 
     def _findmax(self, remove, child):
+        """Find the furthest right child of a node and returns it plus parent."""
         parent = remove
         current = child
         while current.right:
             parent = current
             current = current.right
         return [parent, current]
-
 
     def _depth_of_node(self, node):
         """Find the depth from top of tree to our node."""
@@ -283,7 +294,6 @@ class Binary_Search_Tree(object):
         the_list = []
         depth = 0
         while current:
-            # print(current[0].value)
             current[0].left and the_list.append([current[0].left, current[1] + 1])
             current[0].right and the_list.append([current[0].right, current[1] + 1])
             depth = current[1]
@@ -292,39 +302,84 @@ class Binary_Search_Tree(object):
             except IndexError:
                 return depth
 
-def wrapper(func, *args, **kwargs):
-    """Creates a value for a function with a specific arguement called to it."""
-    def wrapped():
-        return func(*args, **kwargs)
-    return wrapped
-    #code found at http://pythoncentral.io/time-a-python-function/
+    def update_balance(self, node=None):
+        """Update our balance of the tree."""
+        if node is None:
+            node = self.root
+        sides = self._check_right_left_depths(node)
+        if sides[1] - sides[0] > 1:  # for right side being heavier
+            child_sides = self._check_right_left_depths(node.right)
+            if child_sides[1] - child_sides[0] < 0:
+                node = self.double_rotate_right_left(node)
+            else:
+                node = self.left_rotation(node)
+        elif sides[1] - sides[0] < -1:  # for the left side being heavier
+            child_sides = self._check_right_left_depths(node.left)
+            if child_sides[1] - child_sides[0] > 0:
 
-if __name__ == '__main__':
-    Bullshit_tree = Binary_Search_Tree()
-    import random
-    data = [75, 97, 40, 7, 48, 65, 83, 27, 38, 1, 16, 86, 87, 100, 47, 53, 55, 54]
-    print(data)
-    for i in data:
-        Bullshit_tree.insert(i)
-    # wrapped1 = wrapper(Bullshit_tree.search, data[0])
-    # wrapped2 = wrapper(Bullshit_tree.search, data[-1])
-    # print(Bullshit_tree.size())
-    # print(Bullshit_tree.depth())
-    # print(Bullshit_tree.balance())
-    # print(Bullshit_tree.right_depth)
-    # print(Bullshit_tree.left_depth)
-    # print(Bullshit_tree.root.value)
-    # print(Bullshit_tree.root.right.value)
-    # print(Bullshit_tree.root.right.left.value)
-    # print(timeit.timeit(wrapped1))
-    # print(timeit.timeit(wrapped2))
-    print(Bullshit_tree.depth())
-    Bullshit_tree.deletion(75)
-    gen = Bullshit_tree.breadth_first()
-    array = []
-    while len(array) < len(data) - 1:
-        array.append(next(gen))
+                node = self.double_rotate_left_right(node)
+            else:
 
-    print(Bullshit_tree.depth())
-    # print(Bullshit_tree.search(data[-1]))
+                node = self.right_rotation(node)
+        if node is not self.root:
+            self.update_balance(node.parent)
 
+    def _check_right_left_depths(self, node):
+        """Helper function to check depth of both branches of a node."""
+        left_side = 0
+        right_side = 0
+        if node.right:
+            right_side = 1 + self._depth_of_branch(node.right)
+        if node.left:
+            left_side = 1 + self._depth_of_branch(node.left)
+        return (left_side, right_side)
+
+    def right_rotation(self, node):
+        """Do a right rotation of an AVL balanced tree. Returns the new branche's root."""
+        n2 = node
+        k = n2.left
+        n2.left = k.right
+        if n2.left:
+            n2.left.parent = n2
+        k.parent = n2.parent
+        if n2.parent is None:
+            k.parent = None
+            self.root = k
+        elif n2.parent.left == n2:
+            n2.parent.left = k
+        else:
+            n2.parent.right = k
+        k.right = n2
+        k.right.parent = k
+        return k
+
+    def left_rotation(self, node):
+        """Do a left rotation of an AVL balanced tree. Returns the new branche's root."""
+        n2 = node
+        k = n2.right
+        n2.right = k.left
+        if n2.right:
+            n2.right.parent = n2
+        k.parent = n2.parent
+        if n2.parent is None:
+            k.parent = None
+            self.root = k
+        elif n2.parent.right == n2:
+            n2.parent.right = k
+        else:
+            n2.parent.left = k
+        k.left = n2
+        k.left.parent = k
+        return k
+
+    def double_rotate_left_right(self, node):
+        """Do a double left right rotation of an AVL balanced tree. Returns the new branche's root."""
+        node.left = self.left_rotation(node.left)
+        k = self.right_rotation(node)
+        return k
+
+    def double_rotate_right_left(self, node):
+        """Do a double right left rotation of an AVL balanced tree. Returns the new branche's root."""
+        node.right = self.right_rotation(node.right)
+        k = self.left_rotation(node)
+        return k
