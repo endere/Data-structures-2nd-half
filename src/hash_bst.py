@@ -29,7 +29,7 @@ class BinarySearchTree(object):
 
     def insert(self, val, stored_value):
         """Insert a node for start and for right and left."""
-        if type(val) not in [float, int]:
+        if type(val) not in [float, int, long]:
             raise TypeError('Numbers only >:(')
         if self.root is None:
             self.root = Node(val, None, stored_value)
