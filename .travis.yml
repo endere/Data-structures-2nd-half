@@ -6,7 +6,7 @@ before_script:
   - pip install -e .
 script: 
   - py.test src/
-  - cov src/
-  - cov-report
+  - pytest-cov src/
+  - pytest-cov-report
 after_success:
   - coveralls
