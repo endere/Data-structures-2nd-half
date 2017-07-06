@@ -27,7 +27,7 @@ if __name__ == '__main__':
     print('recursion took ', timeB - timeA)
 
 
-        def print_tree(self):
+    def print_tree(self):
         current = [self.root, 0]
         the_list = []
         depth = 0
