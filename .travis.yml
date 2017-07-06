@@ -4,6 +4,7 @@ python:
   - "3.6"
 before_script:
   - pip install -e .
+  - pip install -e .[test]
 script: 
   - py.test src/ --cov=src/ --cov-report
 after_success:
