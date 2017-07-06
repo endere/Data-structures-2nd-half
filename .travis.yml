@@ -1,11 +1,7 @@
 language: python
-python:
-  - "2.7"
-  - "3.6"
 before_script:
   - pip install -e .
-  - pip install -e .[testing]
 script: 
-  - py.test src --cov=src --cov-report term-missing
+  - tox
 after_success:
   - coveralls
