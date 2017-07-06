@@ -45,33 +45,44 @@ class HashTable(object):
 
     def fnv_set(self, key, value):
         """."""
-        if type(key) != str:
-            raise TypeError("This is not the string you're looking for!")
-        else:
-            number = self._fnv_hash(key)
-            print(type(number))
-            self.dict_bst[int(str(number)[-3:])].insert(int(number), value)
+        if self.fnv_get(key) is None:
+            if type(key) != str:
+                raise TypeError("This is not the string you're looking for!")
+            else:
+                number = self._fnv_hash(key)
+                print(type(number))
+                self.dict_bst[int(str(number)[-3:])].insert(int(number), value)
 
     def fnv_get(self, key):
         """."""
         if type(key) != str:
             raise TypeError("This is not the string you're looking for!")
         else:
-            number = self._fnv_hash(key)
-            return self.dict_bst[int(str(number)[-3:])].search(number)
+            try:
+                number = self._fnv_hash(key)
+                return self.dict_bst[int(str(number)[-3:])].search(number).stored_value
+            except AttributeError:
+                return None
 
 
 if __name__ == '__main__':
     HashyMcHashTable = HashTable(1000)
     print(HashyMcHashTable.fnv_set("This is my strang", "I like strings a lot."))
-    print(HashyMcHashTable.fnv_get("This is my strang").stored_value)
+    print(HashyMcHashTable.fnv_get("This is my strang"))
+    print("-------------------------")
+    print(HashyMcHashTable.fnv_set("This is my strang", "To Yo Bo Ho Fo So"))
+    print(HashyMcHashTable.fnv_get("This is my strang"))
+    keys = []
     fake = Faker()
     for i in range(100):
         word = fake.word()
-        name = fake.name()
-        HashyMcHashTable.fnv_set(str(word), str(name))
-        print(str(word), str(name))
+        if word not in keys:
+            keys.append(word)
+            name = fake.name()
+            HashyMcHashTable.fnv_set(str(word), str(name))
+            print(str(word), str(name))
+            lasr_added = word
     print("--------------------------")
-    print(HashyMcHashTable.fnv_get(str(word)).stored_value)
-    print(str(word))
+    print(HashyMcHashTable.fnv_get(str(lasr_added)))
+    print(str(lasr_added))
 
