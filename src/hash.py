@@ -20,11 +20,8 @@ class HashTable(object):
     def additive_set(self, key, value):
         """Store the given value using the given key."""
         if self.additive_get(key) is None:
-            if type(key) != str:
-                raise TypeError("This is not the string you're looking for!")
-            else:
-                number = self._additive_hash(key)
-                self.dict_bst[int(str(number)[-2:])].insert(number, value)
+            number = self._additive_hash(key)
+            self.dict_bst[int(str(number)[-2:])].insert(number, value)
 
     def additive_get(self, key):
         """Return the value stored with the given key."""
@@ -33,7 +30,7 @@ class HashTable(object):
         else:
             try:
                 number = self._additive_hash(key)
-                return self.dict_bst[int(str(number)[-2:])].search(number)
+                return self.dict_bst[int(str(number)[-2:])].search(number).stored_value
             except AttributeError:
                 return None
 
@@ -46,11 +43,8 @@ class HashTable(object):
     def fnv_set(self, key, value):
         """."""
         if self.fnv_get(key) is None:
-            if type(key) != str:
-                raise TypeError("This is not the string you're looking for!")
-            else:
-                number = self._fnv_hash(key)
-                self.dict_bst[int(str(number)[-3:])].insert(int(number), value)
+            number = self._fnv_hash(key)
+            self.dict_bst[int(str(number)[-3:])].insert(int(number), value)
 
     def fnv_get(self, key):
         """."""
@@ -64,7 +58,7 @@ class HashTable(object):
                 return None
 
 
-if __name__ == '__main__':
+if __name__ == '__main__':  # pragma no cover
     HashyMcHashTable = HashTable(1000)
     print(HashyMcHashTable.fnv_set("This is my strang", "I like strings a lot."))
     print(HashyMcHashTable.fnv_get("This is my strang"))
