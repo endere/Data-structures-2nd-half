@@ -65,16 +65,18 @@ if __name__ == '__main__':  # pragma no cover
     print("-------------------------")
     print(HashyMcHashTable.fnv_set("This is my strang", "To Yo Bo Ho Fo So"))
     print(HashyMcHashTable.fnv_get("This is my strang"))
-    file = open('words', 'r')
-    data = file.read()
-    file.close()
-    data = data.split('\n')
-    for i in range(len(data)):
-        print(len(data) - i)
-        HashyMcHashTable.fnv_set(data[i], data[i])
     print(HashyMcHashTable.fnv_get('yowling'))
     print(HashyMcHashTable.fnv_get('zodiac'))
     print(HashyMcHashTable.fnv_get('zebu'))
     print(HashyMcHashTable.fnv_get('eyed'))
     print(HashyMcHashTable.fnv_get('fable'))
     print(HashyMcHashTable.fnv_get('personality'))
+    with open('/usr/share/dict/words') as dictionary:
+        data = dictionary.read()
+        data = data.split('\n')
+    for i in range(len(data)):
+        print(len(data) - i)
+        HashyMcHashTable.fnv_set(data[i], data[i])
+    for key in HashyMcHashTable.dict_bst:
+        print("key: {} , len: {}".format(key, HashyMcHashTable.dict_bst[key].size()))
+
