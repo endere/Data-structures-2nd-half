@@ -1,6 +1,7 @@
 """Hash tables."""
 import bst
 
+
 class HashTable(object):
     """Class object for our Hash Table."""
 
@@ -59,24 +60,29 @@ class HashTable(object):
 
 
 if __name__ == '__main__':  # pragma no cover
-    HashyMcHashTable = HashTable(1000)
-    print(HashyMcHashTable.fnv_set("This is my strang", "I like strings a lot."))
-    print(HashyMcHashTable.fnv_get("This is my strang"))
-    print("-------------------------")
-    print(HashyMcHashTable.fnv_set("This is my strang", "To Yo Bo Ho Fo So"))
-    print(HashyMcHashTable.fnv_get("This is my strang"))
-    print(HashyMcHashTable.fnv_get('yowling'))
-    print(HashyMcHashTable.fnv_get('zodiac'))
-    print(HashyMcHashTable.fnv_get('zebu'))
-    print(HashyMcHashTable.fnv_get('eyed'))
-    print(HashyMcHashTable.fnv_get('fable'))
-    print(HashyMcHashTable.fnv_get('personality'))
+    HashyMcHashTable = HashTable(100)
+    # print(HashyMcHashTable.fnv_set("This is my strang", "I like strings a lot."))
+    # print(HashyMcHashTable.fnv_get("This is my strang"))
+    # print("-------------------------")
+    # print(HashyMcHashTable.fnv_set("This is my strang", "To Yo Bo Ho Fo So"))
+    # print(HashyMcHashTable.fnv_get("This is my strang"))
+    # print(HashyMcHashTable.fnv_get('yowling'))
+    # print(HashyMcHashTable.fnv_get('zodiac'))
+    # print(HashyMcHashTable.fnv_get('zebu'))
+    # print(HashyMcHashTable.fnv_get('eyed'))
+    # print(HashyMcHashTable.fnv_get('fable'))
+    # print(HashyMcHashTable.fnv_get('personality'))
     with open('/usr/share/dict/words') as dictionary:
         data = dictionary.read()
         data = data.split('\n')
     for i in range(len(data)):
         print(len(data) - i)
-        HashyMcHashTable.fnv_set(data[i], data[i])
+        HashyMcHashTable.additive_set(data[i], data[i])
     for key in HashyMcHashTable.dict_bst:
         print("key: {} , len: {}".format(key, HashyMcHashTable.dict_bst[key].size()))
-
+    test_array = []
+    gen = HashyMcHashTable.dict_bst[50].in_order()
+    while len(test_array) < HashyMcHashTable.dict_bst[50].size():
+        test_array.append(next(gen))
+    for i in test_array:
+        print(HashyMcHashTable.dict_bst[50].search(i).stored_value)
