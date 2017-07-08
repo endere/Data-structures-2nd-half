@@ -60,7 +60,7 @@ class HashTable(object):
 
 
 if __name__ == '__main__':  # pragma no cover
-    HashyMcHashTable = HashTable(100)
+    HashyMcHashTable = HashTable(1000)
     # print(HashyMcHashTable.fnv_set("This is my strang", "I like strings a lot."))
     # print(HashyMcHashTable.fnv_get("This is my strang"))
     # print("-------------------------")
@@ -77,12 +77,12 @@ if __name__ == '__main__':  # pragma no cover
         data = data.split('\n')
     for i in range(len(data)):
         print(len(data) - i)
-        HashyMcHashTable.additive_set(data[i], data[i])
+        HashyMcHashTable.fnv_set(data[i], data[i])
     for key in HashyMcHashTable.dict_bst:
         print("key: {} , len: {}".format(key, HashyMcHashTable.dict_bst[key].size()))
     test_array = []
-    gen = HashyMcHashTable.dict_bst[50].in_order()
-    while len(test_array) < HashyMcHashTable.dict_bst[50].size():
+    gen = HashyMcHashTable.dict_bst[500].in_order()
+    while len(test_array) < HashyMcHashTable.dict_bst[500].size():
         test_array.append(next(gen))
     for i in test_array:
-        print(HashyMcHashTable.dict_bst[50].search(i).stored_value)
+        print(HashyMcHashTable.dict_bst[500].search(i).stored_value)
