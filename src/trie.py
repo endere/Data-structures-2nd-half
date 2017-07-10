@@ -70,6 +70,9 @@ class TrieTree(object):
                     self.length -= 1
                     break
 
+    def traversal(self, start):
+        """Traverse through the tree and return a list of all strings with the given start."""
+        pass
 
 if __name__ == '__main__':
     test__the_trie_tree = TrieTree()
