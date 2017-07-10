@@ -31,11 +31,6 @@ class BinarySearchTree(object):
         """Insert a node for start and for right and left."""
         # if type(val) not in [float, int]:
         #     raise TypeError('Please insert only numbers.')
-        try:
-            val += 1
-            val -= 1
-        except TypeError:
-            raise TypeError("Only insert numbers.")
         if self.root is None:
             self.root = Node(val, None, stored_value)
             self.length += 1
@@ -375,3 +370,4 @@ class BinarySearchTree(object):
         node.right = self._right_rotation(node.right)
         k = self._left_rotation(node)
         return k
+
