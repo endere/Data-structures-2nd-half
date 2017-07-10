@@ -4,8 +4,9 @@
 class Node(object):
     """Create a node object that points to a parent, left child, and right child."""
 
-    def __init__(self, value, parent=None):
+    def __init__(self, value, parent=None, stored_value=None):
         """Init for our nodes."""
+        self.stored_value = stored_value
         self.value = value
         self.parent = parent
         self.left = None
@@ -26,12 +27,12 @@ class BinarySearchTree(object):
                 for i in iterable:
                     self.insert(i)
 
-    def insert(self, val):
+    def insert(self, val, stored_value=None):
         """Insert a node for start and for right and left."""
-        if type(val) not in [float, int]:
-            raise TypeError('Please insert only numbers.')
+        # if type(val) not in [float, int]:
+        #     raise TypeError('Please insert only numbers.')
         if self.root is None:
-            self.root = Node(val)
+            self.root = Node(val, None, stored_value)
             self.length += 1
         else:
             current = self.root
@@ -40,7 +41,7 @@ class BinarySearchTree(object):
                     raise ValueError('Value already in tree.')
                 if val > current.value:
                     if current.right is None:
-                        current.right = Node(val, current)
+                        current.right = Node(val, current, stored_value)
                         self._update_balance(current)
                         self.length += 1
                         break
@@ -48,7 +49,7 @@ class BinarySearchTree(object):
                         current = current.right
                 else:
                     if current.left is None:
-                        current.left = Node(val, current)
+                        current.left = Node(val, current, stored_value)
                         self._update_balance(current)
                         self.length += 1
                         break
@@ -369,3 +370,4 @@ class BinarySearchTree(object):
         node.right = self._right_rotation(node.right)
         k = self._left_rotation(node)
         return k
+

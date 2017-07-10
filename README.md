@@ -31,3 +31,13 @@ Binary Search Tree:
 -in_order(self): Generator function that yields values from the tree in numerical order.
 
 -deletion(self): Deletes a node from the tree, while keeping the shape and order of the tree intact.
+
+#Hash Table Functions
+-_hash(self, key): Use fnv hash if function is fnv, or uses additive hash if function is add.
+Time complexity: O(n)
+
+-set(self, key, value): sends a key through a hash and then sets its value in a corresponding bucket.
+Time complexity: O(n) + O(log(n)*2)
+
+-get(self, key): Returns the value of given key from the hash table.
+Time complexity O(n) + O(log(n))
