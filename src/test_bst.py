@@ -96,7 +96,7 @@ PARAMS_TABLE_DELETION = [
 
 PARAMS_TABLE_NAN = [
     ("test"),
-    (True),
+    # (True),
     ([1, 2, 3]),
     ({'a key': 'a value'})
 ]

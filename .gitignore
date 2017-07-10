@@ -101,3 +101,5 @@ ENV/
 .mypy_cache/
 test_recursion.py
 recursion.py
+words
+src/words
