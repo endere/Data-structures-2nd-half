@@ -5,84 +5,45 @@ import bst
 class HashTable(object):
     """Class object for our Hash Table."""
 
-    def __init__(self, bucket_number):
-        """Init for our hash."""
+    def __init__(self, bucket_number, function='fnv'):
+        """Init for our hash.
+
+        Accepts a string to determine which hash the table uses.
+        """
         self.dict_bst = {}
+        self.function = function
         for i in range(bucket_number):
-            self.dict_bst[i] = bst.BinarySearchTree()
+                self.dict_bst[i] = bst.BinarySearchTree()
 
-    def _additive_hash(self, key):
-        """Hash they key provided."""
-        h = 0
-        for i in range(len(key)):
-            h += ord(key[i])
-        return h
+    def _hash(self, key):
+        """Use fnv hash if function is fnv, or uses additive hash if function is add."""
+        if self.function == 'fnv':
+            h = 2166136261
+            for i in range(len(key)):
+                h = (h * 16777619) ^ ord(key[i])
+            return h
+        elif self.function == 'add':
+            h = 0
+            for i in range(len(key)):
+                h += ord(key[i])
+            return h
 
-    def additive_set(self, key, value):
-        """Store the given value using the given key."""
-        if self.additive_get(key) is None:
-            number = self._additive_hash(key)
-            self.dict_bst[int(str(number)[-2:])].insert(number, value)
+    def set(self, key, value):
+        """Place an item in the hash table."""
+        bucket_index = 3 if self.function == 'fnv' else 2
+        number = self._hash(key)
+        stored_key = number if self.function == 'fnv' else key
+        if self.get(key) is None:
+            self.dict_bst[int(str(number)[-bucket_index:])].insert(stored_key, value)
 
-    def additive_get(self, key):
-        """Return the value stored with the given key."""
+    def get(self, key):
+        """Use a key to retrieve a stored value from the table."""
         if type(key) != str:
-            raise TypeError("This is not the string you're looking for!")
-        else:
-            try:
-                number = self._additive_hash(key)
-                return self.dict_bst[int(str(number)[-2:])].search(number).stored_value
-            except AttributeError:
-                return None
-
-    def _fnv_hash(self, key):
-        h = 2166136261
-        for i in range(len(key)):
-            h = (h * 16777619) ^ ord(key[i])
-        return h
-
-    def fnv_set(self, key, value):
-        """."""
-        if self.fnv_get(key) is None:
-            number = self._fnv_hash(key)
-            self.dict_bst[int(str(number)[-3:])].insert(int(number), value)
-
-    def fnv_get(self, key):
-        """."""
-        if type(key) != str:
-            raise TypeError("This is not the string you're looking for!")
-        else:
-            try:
-                number = self._fnv_hash(key)
-                return self.dict_bst[int(str(number)[-3:])].search(number).stored_value
-            except AttributeError:
-                return None
-
-
-if __name__ == '__main__':  # pragma no cover
-    HashyMcHashTable = HashTable(1000)
-    # print(HashyMcHashTable.fnv_set("This is my strang", "I like strings a lot."))
-    # print(HashyMcHashTable.fnv_get("This is my strang"))
-    # print("-------------------------")
-    # print(HashyMcHashTable.fnv_set("This is my strang", "To Yo Bo Ho Fo So"))
-    # print(HashyMcHashTable.fnv_get("This is my strang"))
-    # print(HashyMcHashTable.fnv_get('yowling'))
-    # print(HashyMcHashTable.fnv_get('zodiac'))
-    # print(HashyMcHashTable.fnv_get('zebu'))
-    # print(HashyMcHashTable.fnv_get('eyed'))
-    # print(HashyMcHashTable.fnv_get('fable'))
-    # print(HashyMcHashTable.fnv_get('personality'))
-    with open('/usr/share/dict/words') as dictionary:
-        data = dictionary.read()
-        data = data.split('\n')
-    for i in range(len(data)):
-        print(len(data) - i)
-        HashyMcHashTable.fnv_set(data[i], data[i])
-    for key in HashyMcHashTable.dict_bst:
-        print("key: {} , len: {}".format(key, HashyMcHashTable.dict_bst[key].size()))
-    test_array = []
-    gen = HashyMcHashTable.dict_bst[500].in_order()
-    while len(test_array) < HashyMcHashTable.dict_bst[500].size():
-        test_array.append(next(gen))
-    for i in test_array:
-        print(HashyMcHashTable.dict_bst[500].search(i).stored_value)
+                raise TypeError("This is not the string you're looking for!")
+        number = self._hash(key)
+        bucket_index = 3 if self.function == 'fnv' else 2
+        stored_key = number if self.function == 'fnv' else key
+        try:
+            return self.dict_bst[int(str(number)[-bucket_index:])].search(stored_key).stored_value
+        except AttributeError:
+            return None

@@ -56,7 +56,7 @@ class TrieTree(object):
                 current = list(filter(lambda x: x.value == string[i], current.next_list))[0]
             except IndexError:
                 raise IndexError("String not in tree.")
-        if current.end == False:
+        if current.end is False:
             raise IndexError("String not in tree.")
         if len(current.next_list) > 0:
             current.end = False
@@ -73,40 +73,20 @@ class TrieTree(object):
 
 if __name__ == '__main__':
     test__the_trie_tree = TrieTree()
-    # print(test__the_trie_tree.insert('fire'))
-    # print(test__the_trie_tree.insert('fig'))
-    # print(test__the_trie_tree.contains('fire'))
-    # print(test__the_trie_tree.contains('fig'))
-    # print(test__the_trie_tree.contains('pig'))
-    # print(test__the_trie_tree.remove('fire'))
-    # print(test__the_trie_tree.contains('fire'))
-    # print(test__the_trie_tree.contains('fig'))
     with open('/usr/share/dict/words') as dictionary:
         data = dictionary.read()
         data = data.split('\n')
+    import time
+    import sys
+   
     for i in range(len(data)):
-        print(len(data) - i)
-        print('-----')
-        print(data[i])
         test__the_trie_tree.insert(data[i])
-    # print(test__the_trie_tree.root.next_list)
-    # gen = (o.value for o in test__the_trie_tree.root.next_list[1].next_list)
-    # test_array = []
-    # while len(test_array) < len(test__the_trie_tree.root.next_list[1].next_list):
-    #     test_array.append(next(gen))
-
-    # print(test_array)
+        x = i / len(data) * 100
+        sys.stdout.write("\r%d%%" % x)
+        sys.stdout.flush()
     print(test__the_trie_tree.contains('dinosaurs'))
     print(test__the_trie_tree.contains('dinosaur'))
-
-    # print(test__the_trie_tree.contains('skjdgjkdfkja'))
     test__the_trie_tree.remove('dinosaur')
-    test__the_trie_tree.remove('dinosaurs')
-
     print(test__the_trie_tree.contains('dinosaurs'))
     print(test__the_trie_tree.contains('dinosaur'))
     print(test__the_trie_tree.size())
-    print(len(data))
-    # print(test__the_trie_tree.contains('fastidious'))
-    # print(test__the_trie_tree.remove('pharaoh'))
-    # print(test__the_trie_tree.contains('pharaoh'))
