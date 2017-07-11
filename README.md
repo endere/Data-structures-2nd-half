@@ -41,3 +41,8 @@ Time complexity: O(n) + O(log(n)*2)
 
 -get(self, key): Returns the value of given key from the hash table.
 Time complexity O(n) + O(log(n))
+
+#Bubble sort
+-Uses the bubble sort algorithm to sort a list of numbers.
+Time complexity best case: O(n)
+Time complexity worst case: O(n^2)

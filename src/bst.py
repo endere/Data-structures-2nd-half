@@ -76,7 +76,10 @@ class BinarySearchTree(object):
 
     def depth(self):
         """Return depth of left and right binary search tree."""
-        return self._depth_of_branch(self.root)
+        try:
+            return self._depth_of_branch(self.root) + 1
+        except AttributeError:
+            return 0
 
     def contains(self, value):
         """Return True if value is there and False if not."""
@@ -371,3 +374,7 @@ class BinarySearchTree(object):
         k = self._left_rotation(node)
         return k
 
+if __name__ == '__main__':
+    data = [1]
+    test_tree = BinarySearchTree(data)
+    print(test_tree.depth())
