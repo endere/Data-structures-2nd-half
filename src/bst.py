@@ -385,20 +385,3 @@ class BinarySearchTree(object):
         node.right = self._right_rotation(node.right)
         k = self._left_rotation(node)
         return k
-
-if __name__ == '__main__':
-    data = [1, 2, 3, 4, 5, 6, 7, 8, 9]
-    test_tree = BinarySearchTree(data)
-    # print('depth:', test_tree.depth())
-    array = [i for i in test_tree.post_order()]
-    print(array)
-    # tree_two = BinarySearchTree(i for i in test_tree.in_order())
-    # thing = test_tree.in_order()
-    # print(next(thing))
-    # print(i for i in test_tree.in_order())
-
-    test_array = []
-    test_generator = test_tree.post_order()
-    while len(test_array) < test_tree.size():
-        test_array.append(next(test_generator))
-        print(test_array)
