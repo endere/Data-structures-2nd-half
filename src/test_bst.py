@@ -184,6 +184,14 @@ def test_breadth_first(data, result):
     assert test_array == result
 
 
+@pytest.mark.parametrize("data, result", PARAMS_TABLE_BREADTH)
+def test_breadth_first_for_loop(data, result):
+    """Test breadth first called with a loop in a list."""
+    test_tree = bst.BinarySearchTree(data)
+    test_array = [i for i in test_tree.breadth_first()]
+    assert test_array == result
+
+
 @pytest.mark.parametrize("data, result", PARAMS_TABLE_PREORDER)
 def test_pre_order(data, result):
     """Test pre_order."""
@@ -192,6 +200,14 @@ def test_pre_order(data, result):
     test_generator = test_tree.pre_order()
     while len(test_array) < test_tree.size():
         test_array.append(next(test_generator))
+    assert test_array == result
+
+
+@pytest.mark.parametrize("data, result", PARAMS_TABLE_PREORDER)
+def test_pre_order_for_loop(data, result):
+    """Test pre_order called with a loop in a list."""
+    test_tree = bst.BinarySearchTree(data)
+    test_array = [i for i in test_tree.pre_order()]
     assert test_array == result
 
 
@@ -206,6 +222,14 @@ def test_post_order(data, result):
     assert test_array == result
 
 
+@pytest.mark.parametrize("data, result", PARAMS_TABLE_POSTORDER)
+def test_post_order_for_loop(data, result):
+    """Test post_order called with a loop in a list."""
+    test_tree = bst.BinarySearchTree(data)
+    test_array = [i for i in test_tree.post_order()]
+    assert test_array == result
+
+
 @pytest.mark.parametrize("data, result", PARAMS_TABLE_INORDER)
 def test_in_order(data, result):
     """Test in_order."""
@@ -214,6 +238,14 @@ def test_in_order(data, result):
     test_generator = test_tree.in_order()
     while len(test_array) < test_tree.size():
         test_array.append(next(test_generator))
+    assert test_array == result
+
+
+@pytest.mark.parametrize("data, result", PARAMS_TABLE_INORDER)
+def test_in_order_for_loop(data, result):
+    """Test in_order called with a loop in a list."""
+    test_tree = bst.BinarySearchTree(data)
+    test_array = [i for i in test_tree.in_order()]
     assert test_array == result
 
 
@@ -226,7 +258,6 @@ def test_deletion(data, delete_me, result):
     test_generator = test_tree.in_order()
     while len(test_array) < test_tree.size():
         test_array.append(next(test_generator))
-        print(test_array)
     assert test_array == result
 
 

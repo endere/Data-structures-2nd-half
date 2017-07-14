@@ -87,9 +87,4 @@ if __name__ == '__main__':
         x = i / len(data) * 100
         sys.stdout.write("\r%d%%" % x)
         sys.stdout.flush()
-    print(test__the_trie_tree.contains('dinosaurs'))
-    print(test__the_trie_tree.contains('dinosaur'))
-    test__the_trie_tree.remove('dinosaur')
-    print(test__the_trie_tree.contains('dinosaurs'))
-    print(test__the_trie_tree.contains('dinosaur'))
     print(test__the_trie_tree.size())

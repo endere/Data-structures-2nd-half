@@ -103,7 +103,10 @@ class BinarySearchTree(object):
             current.left and the_list.append(current.left)
             current.right and the_list.append(current.right)
             yield current.value
-            current = the_list.pop(0)
+            try:
+                current = the_list.pop(0)
+            except IndexError:
+                current = None
 
     def pre_order(self):
         """Generator function that yields values from tree in pre order."""
@@ -115,7 +118,10 @@ class BinarySearchTree(object):
             if current.left:
                 current = current.left
             else:
-                current = the_list.pop()
+                try:
+                    current = the_list.pop()
+                except IndexError:
+                    current = None
 
     def post_order(self):
         """Generator function that yields values from tree in post order."""
@@ -129,8 +135,10 @@ class BinarySearchTree(object):
                 the_list = [current.left, current.right, current] + the_list
                 the_list[:3] = [x for x in the_list[:3] if x is not None]
                 seen_parents.append(current)
-            if len(the_list) > 0:
+            try:
                 current = the_list.pop(0)
+            except IndexError:
+                current = None
 
     def in_order(self):
         """Generator function that yields values from tree in order."""
@@ -145,8 +153,10 @@ class BinarySearchTree(object):
                 seen_parents.append(current)
                 the_list = [current.left, current, current.right] + the_list
                 the_list[:3] = [x for x in the_list[:3] if x is not None]
-            if len(the_list) > 0:
+            try:
                 current = the_list.pop(0)
+            except IndexError:
+                current = None
 
     def deletion(self, value):
         """Delete our nodes in our bst."""
@@ -375,6 +385,18 @@ class BinarySearchTree(object):
         return k
 
 if __name__ == '__main__':
-    data = [1]
+    data = [1, 2, 3, 4, 5, 6, 7, 8, 9]
     test_tree = BinarySearchTree(data)
-    print(test_tree.depth())
+    # print('depth:', test_tree.depth())
+    array = [i for i in test_tree.post_order()]
+    print(array)
+    # tree_two = BinarySearchTree(i for i in test_tree.in_order())
+    # thing = test_tree.in_order()
+    # print(next(thing))
+    # print(i for i in test_tree.in_order())
+
+    test_array = []
+    test_generator = test_tree.post_order()
+    while len(test_array) < test_tree.size():
+        test_array.append(next(test_generator))
+        print(test_array)
