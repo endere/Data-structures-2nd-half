@@ -4,7 +4,10 @@
 def merge_sort(array):
     """Merge sort data structure function."""
     if len(array) > 1:
-        half = len(array) / 2 
+        if len(array) % 2 == 0:
+            half = int(len(array) / 2)
+        else:
+            half = int(len(array) / 2 + .5)
         left_half = array[:half]
         right_half = array[half:]
         merge_sort(left_half)

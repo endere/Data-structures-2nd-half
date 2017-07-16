@@ -10,15 +10,13 @@ def quick_sort(array):
     if len(array) == 0:
         return array
     pivot_point = array[0]
-    stored_index = 1
+    stored_index = 0
     for i in range(len(array)):
         if pivot_point > array[i]:
-            array[stored_index], array[i] = array[i], array[stored_index]
             stored_index += 1
-    print(stored_index)
-    print(len(array))
+            array[stored_index], array[i] = array[i], array[stored_index]
     array[stored_index], array[0] = array[0], array[stored_index]
-    return quick_sort(array[:stored_index]) + array[stored_index] + quick_sort(array[stored_index + 1:])
+    return quick_sort(array[:stored_index]) + [array[stored_index]] + quick_sort(array[stored_index + 1:])
 
 
 if __name__ == '__main__':
@@ -27,7 +25,7 @@ if __name__ == '__main__':
     from functools import reduce
     import sys
     times = []
-    num_runs = 5
+    num_runs = 500
     string_length = 5
     for i in range(num_runs):
         data = random.sample(range(string_length), string_length)
