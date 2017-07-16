@@ -1,6 +1,9 @@
 import random
 
 def bogo_sort(to_sort):
+    for i in range(len(to_sort)):
+        if not isinstance(to_sort[i], int):
+            raise TypeError('Invalid input.')
     while not is_sorted(to_sort):
         random.shuffle(to_sort)
     return to_sort
