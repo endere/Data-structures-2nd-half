@@ -4,6 +4,7 @@ import random
 import bubblesort
 import bogosort
 import insertionsort
+import mergesort
 
 PARAMS_TABLE_INVALID = [
     ('string'),
@@ -17,7 +18,8 @@ PARAMS_TABLE_INVALID = [
 PARAMS_TABLE_FUNCTIONS = [
     (bubblesort.bubble_sort),
     (bogosort.bogo_sort),
-    (insertionsort.insertion_sort)
+    (insertionsort.insertion_sort),
+    (mergesort.merge_sort),
 ]
 
 
