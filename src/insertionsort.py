@@ -2,17 +2,14 @@
 def insertion_sort(array):
     """."""
     for i in range(len(array)):
-        print("-------------------")
         for x in range(len(array[:i])):
-            # print(array[:i])
             if array[i] < array[i - x - 1]:
-                # print("We made it here")
-                pass
+                if x == len(array[:i]) - 1:
+                    array.insert(i - x - 1, array.pop(i))
             else:
-                # print("We made it here not")
-                print(array[i], array[i - x - 1])
                 array.insert(i - x, array.pop(i))  # (new index, remove old index)
                 break
+    # array.insert(2, array.pop(4))
     return array
 
 
@@ -22,16 +19,15 @@ if __name__ == '__main__':
     from functools import reduce
     import sys
     times = []
-    num_runs = 1
+    num_runs = 5000
     string_length = 5
     for i in range(num_runs):
-        # x = i / num_runs * 100
-        # sys.stdout.write("\r%d%%" % x)
-        # sys.stdout.flush()
+        x = i / num_runs * 100
+        sys.stdout.write("\r%d%%" % x)
+        sys.stdout.flush()
         data = random.sample(range(string_length), string_length)
         timeA = datetime.datetime.now()
-        print(data)
-        print(insertion_sort(data))
+        insertion_sort(data)
         timeB = datetime.datetime.now()
         times.append(timeB - timeA)
     average_time = reduce(lambda x, y: x + y, times) / len(times)
