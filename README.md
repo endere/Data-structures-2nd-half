@@ -42,7 +42,33 @@ Time complexity: O(n) + O(log(n)*2)
 -get(self, key): Returns the value of given key from the hash table.
 Time complexity O(n) + O(log(n))
 
+#Trie Tree/Traversal 
+-Functions:
+-Insert: Inserts a node into the tree.
+-Contains: Returns true if string is in the tree.
+-Size: Return total number of words in tree.
+-Remove: Remove string from tree.
+-Traversal: Traverses through the tree and return a list of all strings with the given start.
+
+#Bogo Sort:
+-Randomly shuffles through until it is sorted out. 
+Time Complexity Best Case = O(1)
+
 #Bubble sort
 -Uses the bubble sort algorithm to sort a list of numbers.
 Time complexity best case: O(n)
 Time complexity worst case: O(n^2)
+
+#Insertion Sort
+Insertion sort is a simple sorting algorithm that builds the final sorted array (or list) one item at a time. It is much less efficient on large lists than more advanced algorithms such as quicksort, heapsort, or merge sort.
+
+#Merge Sort 
+Merge sort will divide the list of ints in half and then divide those into half and then compare each pair and swap the values where one is less than the other. Once both sides have been sorted out it will do one more sort to sort out the entire list. 
+
+#Quick Sort 
+Quicksort is a comparison sort, meaning that it can sort items of any type for which a "less-than" relation (formally, a total order) is defined.
+
+#Radix Sort 
+Radix sort will sort the values out by their values places starting at the end of the value. Once it has sorted through all the value places it'll sort the whole list out. 
+
+

@@ -1,6 +1,6 @@
+"""Test for our trie tree."""
 import trie
 import pytest
-
 
 
 PARAMS_TABLE_INSERT = [
@@ -10,12 +10,9 @@ PARAMS_TABLE_INSERT = [
 ]
 
 
-
-
-
 @pytest.mark.parametrize("data, results", PARAMS_TABLE_INSERT)
 def test_insert_single_word(data, results):
-    """Test if insertion works correctly."""
+    """Test if insertion works correctly for a single word."""
     test_tree = trie.TrieTree()
     test_tree.insert(data)
     assert test_tree.root.next_list[0].value == results[0]
@@ -25,45 +22,49 @@ def test_insert_single_word(data, results):
     assert test_tree.root.next_list[0].next_list[0].next_list[0].value == results[2]
     assert test_tree.root.next_list[0].next_list[0].next_list[0].end is True
 
+
 def test_insert_duplicate():
-    """Test if insertion works correctly."""
+    """Test if insertion works correctly for duplicate words."""
     test_tree = trie.TrieTree()
     test_tree.insert('twin')
     test_tree.insert('twin')
     assert len(test_tree.root.next_list) == 1
 
+
 def test_insert_branching():
-    """Test if insertion works correctly."""
+    """Test if insertion works correctly when branching."""
     test_tree = trie.TrieTree()
     test_tree.insert('fir')
     test_tree.insert('fae')
     assert len(test_tree.root.next_list) == 1
     assert len(test_tree.root.next_list[0].next_list) == 2
 
+
 def test_insert_invalid():
-    """Test if insertion works correctly."""
+    """Test if insertion works correctly when invalid."""
     test_tree = trie.TrieTree()
     with pytest.raises(TypeError):
         test_tree.remove(2)
 
 
 def test_insert_empty_string():
-    """Test if insertion works correctly."""
+    """Test if insertion works correctly with empty string."""
     test_tree = trie.TrieTree()
     with pytest.raises(IndexError):
         test_tree.remove('')
 
 
 def test_contains_is_in_tree():
-    """Test if insertion works correctly."""
+    """Test if contains work correctly for string in tree."""
     test_tree = trie.TrieTree()
     test_tree.insert('fir')
     test_tree.insert('fae')
     test_tree.insert('fox')
     assert test_tree.contains('fox')
 
+
 def test_contains_not_in_tree():
-    """Test if insertion works correctly."""
+    """Test if contains work correctly for string not in tree."""
     test_tree = trie.TrieTree()
     test_tree.insert('fir')
     test_tree.insert('fae')
@@ -71,9 +72,8 @@ def test_contains_not_in_tree():
     assert test_tree.contains('forest') is False
 
 
-
 def test_remove_in_tree():
-    """Test if insertion works correctly."""
+    """Test if contains work correctly for removing string in tree."""
     test_tree = trie.TrieTree()
     test_tree.insert('fir')
     test_tree.insert('fae')
@@ -83,9 +83,8 @@ def test_remove_in_tree():
     assert test_tree.contains('fox') is False
 
 
-
 def test_remove_only_removes_endpoint_when_letters_have_children():
-    """Test if insertion works correctly."""
+    """Test remove only removes endpoint when letters have children."""
     test_tree = trie.TrieTree()
     test_tree.insert('fir')
     test_tree.insert('fae')
@@ -98,7 +97,7 @@ def test_remove_only_removes_endpoint_when_letters_have_children():
 
 
 def test_remove_not_in_tree():
-    """Test if insertion works correctly."""
+    """Test remove works correctly when word is not in tree."""
     test_tree = trie.TrieTree()
     test_tree.insert('fir')
     test_tree.insert('faerie')
@@ -108,8 +107,9 @@ def test_remove_not_in_tree():
     with pytest.raises(IndexError):
         test_tree.remove('forest')
 
+
 def test_size():
-    """Test if insertion works correctly."""
+    """Test if size works correctly."""
     test_tree = trie.TrieTree()
     assert test_tree.size() == 0
     test_tree.insert('fir')
@@ -118,10 +118,10 @@ def test_size():
     assert test_tree.size() == 3
     test_tree.remove('fox')
     assert test_tree.size() == 2
-    
+
 
 def test_traversal_from_single_letter():
-    """Test if insertion works correctly."""
+    """Test if traversal of a single letters works correctly."""
     test_tree = trie.TrieTree()
     test_list = ['fae', 'fir', 'faerie', 'fox', 'forest']
     for i in test_list:
@@ -131,8 +131,9 @@ def test_traversal_from_single_letter():
         assert i in traversal_list
     assert len(test_list) == len(traversal_list)
 
+
 def test_traversal_from_multiple_letters():
-    """Test if insertion works correctly."""
+    """Test if traversal of multiple letters works correctly."""
     test_tree = trie.TrieTree()
     test_list = ['fae', 'fir', 'faerie', 'fox', 'forest']
     for i in test_list:
@@ -144,9 +145,8 @@ def test_traversal_from_multiple_letters():
     assert len(test_list) == len(traversal_list)
 
 
-
 def test_trie_with_huge_database():
-    """Import a gigantic dictionary and asserts that it works properly in fnv hash."""
+    """Import a gigantic dictionary and asserts that it works properly in trie tree."""
     test_tree = trie.TrieTree()
     with open('/usr/share/dict/words') as dictionary:
         data = dictionary.read()
