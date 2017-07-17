@@ -25,11 +25,11 @@ PARAMS_TABLE_SIZE = [
 ]
 
 PARAMS_TABLE_DEPTH = [
-    ([5], 0),
-    ([10, 5, 20, 35, 7], 2),
-    ([1, 2, 3, 4, 5, 6, 7, 8, 9], 3),
-    ([5, 6, 3], 1),
-    ([5, 1], 1)
+    ([5], 1),
+    ([10, 5, 20, 35, 7], 3),
+    ([1, 2, 3, 4, 5, 6, 7, 8, 9], 4),
+    ([5, 6, 3], 2),
+    ([5, 1], 2)
 ]
 
 PARAMS_TABLE_CONTAINS = [
@@ -47,21 +47,25 @@ PARAMS_TABLE_BALANCE = [
 ]
 
 PARAMS_TABLE_BREADTH = [
+    ([], []),
     ([4, 2, 3, 1, 6, 5, 7], [3, 2, 5, 1, 4, 6, 7]),
     ([75, 97, 40, 7, 48, 65, 83, 27, 38, 1, 16, 86, 87, 100, 47, 53, 55, 54], [48, 27, 86, 7, 40, 55, 97, 1, 16, 38, 47, 53, 75, 87, 100, 54, 65, 83])
 ]
 
 PARAMS_TABLE_PREORDER = [
+    ([], []),
     ([4, 2, 3, 1, 6, 5, 7], [3, 2, 1, 5, 4, 6, 7]),
     ([75, 97, 40, 7, 48, 65, 83, 27, 38, 1, 16, 86, 87, 100, 47, 53, 55, 54], [48, 27, 7, 1, 16, 40, 38, 47, 86, 55, 53, 54, 75, 65, 83, 97, 87, 100])
 ]
 
 PARAMS_TABLE_POSTORDER = [
+    ([], []),
     ([4, 2, 3, 1, 6, 5, 7], [1, 2, 4, 7, 6, 5, 3]),
     ([75, 97, 40, 7, 48, 65, 83, 27, 38, 1, 16, 86, 87, 100, 47, 53, 55, 54], [1, 16, 7, 38, 47, 40, 27, 54, 53, 65, 83, 75, 55, 87, 100, 97, 86, 48])
 ]
 
 PARAMS_TABLE_INORDER = [
+    ([], []),
     ([4, 2, 3, 1, 6, 5, 7], [1, 2, 3, 4, 5, 6, 7]),
     ([75, 97, 40, 7, 48, 65, 83, 27, 38, 1, 16, 86, 87, 100, 47, 53, 55, 54], [1, 7, 16, 27, 38, 40, 47, 48, 53, 54, 55, 65, 75, 83, 86, 87, 97, 100])
 ]
@@ -180,6 +184,14 @@ def test_breadth_first(data, result):
     assert test_array == result
 
 
+@pytest.mark.parametrize("data, result", PARAMS_TABLE_BREADTH)
+def test_breadth_first_for_loop(data, result):
+    """Test breadth first called with a loop in a list."""
+    test_tree = bst.BinarySearchTree(data)
+    test_array = [i for i in test_tree.breadth_first()]
+    assert test_array == result
+
+
 @pytest.mark.parametrize("data, result", PARAMS_TABLE_PREORDER)
 def test_pre_order(data, result):
     """Test pre_order."""
@@ -188,6 +200,14 @@ def test_pre_order(data, result):
     test_generator = test_tree.pre_order()
     while len(test_array) < test_tree.size():
         test_array.append(next(test_generator))
+    assert test_array == result
+
+
+@pytest.mark.parametrize("data, result", PARAMS_TABLE_PREORDER)
+def test_pre_order_for_loop(data, result):
+    """Test pre_order called with a loop in a list."""
+    test_tree = bst.BinarySearchTree(data)
+    test_array = [i for i in test_tree.pre_order()]
     assert test_array == result
 
 
@@ -202,6 +222,14 @@ def test_post_order(data, result):
     assert test_array == result
 
 
+@pytest.mark.parametrize("data, result", PARAMS_TABLE_POSTORDER)
+def test_post_order_for_loop(data, result):
+    """Test post_order called with a loop in a list."""
+    test_tree = bst.BinarySearchTree(data)
+    test_array = [i for i in test_tree.post_order()]
+    assert test_array == result
+
+
 @pytest.mark.parametrize("data, result", PARAMS_TABLE_INORDER)
 def test_in_order(data, result):
     """Test in_order."""
@@ -210,6 +238,14 @@ def test_in_order(data, result):
     test_generator = test_tree.in_order()
     while len(test_array) < test_tree.size():
         test_array.append(next(test_generator))
+    assert test_array == result
+
+
+@pytest.mark.parametrize("data, result", PARAMS_TABLE_INORDER)
+def test_in_order_for_loop(data, result):
+    """Test in_order called with a loop in a list."""
+    test_tree = bst.BinarySearchTree(data)
+    test_array = [i for i in test_tree.in_order()]
     assert test_array == result
 
 
@@ -222,7 +258,6 @@ def test_deletion(data, delete_me, result):
     test_generator = test_tree.in_order()
     while len(test_array) < test_tree.size():
         test_array.append(next(test_generator))
-        print(test_array)
     assert test_array == result
 
 

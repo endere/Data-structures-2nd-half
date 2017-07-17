@@ -1,5 +1,5 @@
 """Trie tree data structure."""
-
+from stack import Stack
 
 class Node(object):
     """Node object for trietree data structure."""
@@ -23,6 +23,8 @@ class TrieTree(object):
 
     def insert(self, string):
         """Insert a node into the tree."""
+        if not isinstance(string, str):
+            raise TypeError('Must be a string, please try again.')
         current = self.root
         for i in range(len(string)):
             try:
@@ -36,7 +38,6 @@ class TrieTree(object):
     def contains(self, string):
         """Return true if string in tree."""
         current = self.root
-        print('checking if {} is in tree'.format(string))
         for i in range(len(string)):
             try:
                 current = list(filter(lambda x: x.value == string[i], current.next_list))[0]
@@ -72,24 +73,32 @@ class TrieTree(object):
 
     def traversal(self, start):
         """Traverse through the tree and return a list of all strings with the given start."""
-        pass
+        seen = []
+        next_up = Stack()
+        current = self.root
+        for i in range(len(start)):
+            try:
+                current = list(filter(lambda x: x.value == start[i], current.next_list))[0]
+            except IndexError:
+                raise IndexError("String not in tree.")
+        try:
+            while True:
+                if current not in seen:
+                    seen.append(current)
+                for i in current.next_list:
+                    next_up.push(i)
+                if current.end:
+                    word = ""
+                    while True:
+                        if current != self.root:
+                            word += current.value
+                            current = current.parent
+                        else:
+                            yield word[::-1]
+                            break
+                if len(next_up) == 0:
+                    break
+                current = next_up.pop().value
+        except KeyError:
 
-if __name__ == '__main__':
-    test__the_trie_tree = TrieTree()
-    with open('/usr/share/dict/words') as dictionary:
-        data = dictionary.read()
-        data = data.split('\n')
-    import time
-    import sys
-   
-    for i in range(len(data)):
-        test__the_trie_tree.insert(data[i])
-        x = i / len(data) * 100
-        sys.stdout.write("\r%d%%" % x)
-        sys.stdout.flush()
-    print(test__the_trie_tree.contains('dinosaurs'))
-    print(test__the_trie_tree.contains('dinosaur'))
-    test__the_trie_tree.remove('dinosaur')
-    print(test__the_trie_tree.contains('dinosaurs'))
-    print(test__the_trie_tree.contains('dinosaur'))
-    print(test__the_trie_tree.size())
+            raise KeyError('Given value does not exist.')
