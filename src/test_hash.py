@@ -78,6 +78,22 @@ def test_fnv_set_type_error_without_string(value):
         test_table.set(value, "pony")
 
 
+@pytest.mark.parametrize("value", PARAMS_TABLE_TYPE_ERRORS)
+def test_additive_get_type_error_without_string(value):
+    """Test function raises an error when a non-string is searched for in additive hash."""
+    test_table = hash.HashTable(1000, 'add')
+    with pytest.raises(TypeError):
+        test_table.get(value, "unicorns")
+
+
+@pytest.mark.parametrize("value", PARAMS_TABLE_TYPE_ERRORS)
+def test_fnv_get_type_error_without_string(value):
+    """Test function raises an error when a non-string is searched for in fnv hash."""
+    test_table = hash.HashTable(1000)
+    with pytest.raises(TypeError):
+        test_table.get(value, "pony")
+
+
 def test_with_huge_database_fnv():
     """Import a gigantic dictionary and asserts that it works properly in fnv hash."""
     test_table = hash.HashTable(1000)
