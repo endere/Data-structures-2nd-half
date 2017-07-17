@@ -12,6 +12,8 @@ def quick_sort(array):
     pivot_point = array[0]
     stored_index = 0
     for i in range(len(array)):
+        if not isinstance(array[i], int):
+            raise TypeError('Must be an integer, please try again.')
         if pivot_point > array[i]:
             stored_index += 1
             array[stored_index], array[i] = array[i], array[stored_index]
@@ -23,7 +25,6 @@ if __name__ == '__main__':
     import random
     import datetime
     from functools import reduce
-    import sys
     times = []
     num_runs = 500
     string_length = 5
