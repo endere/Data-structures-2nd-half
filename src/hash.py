@@ -10,11 +10,11 @@ class HashTable(object):
 
         Accepts a string to determine which hash the table uses.
         """
-        self.dict_bst = {}
+        self.bucket_list = []
         self.function = function
         self.bucket_number = bucket_number
         for i in range(bucket_number):
-                self.dict_bst[i] = bst.BinarySearchTree()
+                self.bucket_list.append(bst.BinarySearchTree())
 
     def _hash(self, key):
         """Use fnv hash if function is fnv, or uses additive hash if function is add."""
@@ -34,7 +34,7 @@ class HashTable(object):
         number = self._hash(key)
         stored_key = number if self.function == 'fnv' else key
         if self.get(key) is None:
-            self.dict_bst[number % self.bucket_number].insert(stored_key, value)
+            self.bucket_list[number % self.bucket_number].insert(stored_key, value)
 
     def get(self, key):
         """Use a key to retrieve a stored value from the table."""
@@ -43,18 +43,18 @@ class HashTable(object):
         number = self._hash(key)
         stored_key = number if self.function == 'fnv' else key
         try:
-            return self.dict_bst[number % self.bucket_number].search(stored_key).stored_value
+            return self.bucket_list[number % self.bucket_number].search(stored_key).stored_value
         except AttributeError:
             return None
 
 if __name__ == '__main__':
-    test_table = HashTable(1000000)
+    test_table = HashTable(1021)
     with open('/usr/share/dict/words') as dictionary:
         data = dictionary.read()
         data = data.split('\n')
     for i in range(len(data)):
         print(len(data) - i)
         test_table.set(data[i], data[i])
-    print(type(test_table.dict_bst))
-    for key in test_table.dict_bst:
-        print("key: {} , len: {}".format(key, test_table.dict_bst[key].size()))
+    # print(type(test_table.dict_bst))
+    for i in test_table.bucket_list:
+        print("key: {} , len: {}".format(test_table.bucket_list.index(i), i.size()))
