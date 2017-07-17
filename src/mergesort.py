@@ -41,22 +41,74 @@ def merge_sort(array):
     return array
 
 
-if __name__ == '__main__':
+if __name__ == '__main__':  # pragma no cover
     import random
     import datetime
     from functools import reduce
-    import sys
     times = []
-    num_runs = 5
+    num_runs = 500
     string_length = 5
     for i in range(num_runs):
-        data = random.sample(range(string_length), string_length)
+        data = [i for i in range(string_length)]
         timeA = datetime.datetime.now()
-        print(merge_sort(data))
+        merge_sort(data)
         timeB = datetime.datetime.now()
         times.append(timeB - timeA)
     average_time = reduce(lambda x, y: x + y, times) / len(times)
     print(' ')
+    print('pre sorted')
     print('Number of runs: ', num_runs)
     print('Length of lists to sort: ', string_length)
     print('Average time: ', str(average_time)[-8:], 'seconds')
+    string_length = 100
+    for i in range(num_runs):
+        data = [i for i in range(string_length)]
+        timeA = datetime.datetime.now()
+        merge_sort(data)
+        timeB = datetime.datetime.now()
+        times.append(timeB - timeA)
+    average_time = reduce(lambda x, y: x + y, times) / len(times)
+    print(' ')
+    print('pre sorted')
+    print('Number of runs: ', num_runs)
+    print('Length of lists to sort: ', string_length)
+    print('Average time: ', str(average_time)[-8:], 'seconds')
+    string_length = 5
+    for i in range(num_runs):
+        data = [i for i in range(string_length)][::-1]
+        timeA = datetime.datetime.now()
+        merge_sort(data)
+        timeB = datetime.datetime.now()
+        times.append(timeB - timeA)
+    average_time = reduce(lambda x, y: x + y, times) / len(times)
+    print(' ')
+    print('reverse order.')
+    print('Number of runs: ', num_runs)
+    print('Length of lists to sort: ', string_length)
+    print('Average time: ', str(average_time)[-8:], 'seconds')
+    string_length = 100
+    for i in range(num_runs):
+        data = [i for i in range(string_length)][::-1]
+        timeA = datetime.datetime.now()
+        merge_sort(data)
+        timeB = datetime.datetime.now()
+        times.append(timeB - timeA)
+    average_time = reduce(lambda x, y: x + y, times) / len(times)
+    print(' ')
+    print('reverse order.')
+    print('Number of runs: ', num_runs)
+    print('Length of lists to sort: ', string_length)
+    print('Average time: ', str(average_time)[-8:], 'seconds')
+    for i in range(num_runs):
+        data = random.sample(range(string_length), string_length)
+        timeA = datetime.datetime.now()
+        merge_sort(data)
+        timeB = datetime.datetime.now()
+        times.append(timeB - timeA)
+    average_time = reduce(lambda x, y: x + y, times) / len(times)
+    print(' ')
+    print('random Order.')
+    print('Number of runs: ', num_runs)
+    print('Length of lists to sort: ', string_length)
+    print('Average time: ', str(average_time)[-8:], 'seconds')
+

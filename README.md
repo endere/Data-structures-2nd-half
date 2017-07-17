@@ -62,22 +62,22 @@ Time complexity worst case: O(n^2)
 
 #Insertion Sort
 Insertion sort is a simple sorting algorithm that builds the final sorted array (or list) one item at a time. It is much less efficient on large lists than more advanced algorithms such as quicksort, heapsort, or merge sort.
-Time Complexity Best Case = 
-Time Complexity Worst Case = 
+Time Complexity Best Case = O(n)
+Time Complexity Worst Case = O(n^2)
 
 #Merge Sort 
 Merge sort will divide the list of ints in half and then divide those into half and then compare each pair and swap the values where one is less than the other. Once both sides have been sorted out it will do one more sort to sort out the entire list. 
-Time Complexity Best Case = 
-Time Complexity Worst Case = 
+Time Complexity Best Case = O(n log n)
+Time Complexity Worst Case = O(n log n)
 
 #Quick Sort 
 Quicksort is a comparison sort, meaning that it can sort items of any type for which a "less-than" relation (formally, a total order) is defined.
-Time Complexity Best Case =
-Time Complexity Worst Case = 
+Time Complexity Best Case = O(n log n)
+Time Complexity Worst Case = O(n^2)
 
 
 #Radix Sort 
 Radix sort will sort the values out by their values places starting at the end of the value. Once it has sorted through all the value places it'll sort the whole list out. 
-Time Complexity Best Case = 
-Time Complexity Worst Case = 
+Time Complexity Best Case = O(wn)
+Time Complexity Worst Case = O(wn)
 
