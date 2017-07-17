@@ -35,6 +35,7 @@ if __name__ == '__main__':  # pragma no cover
     print('Number of runs: ', num_runs)
     print('Length of lists to sort: ', string_length)
     print('Average time: ', str(average_time)[-8:], 'seconds')
+    times = []
     string_length = 100
     for i in range(num_runs):
         data = [i for i in range(string_length)]
@@ -48,6 +49,7 @@ if __name__ == '__main__':  # pragma no cover
     print('Number of runs: ', num_runs)
     print('Length of lists to sort: ', string_length)
     print('Average time: ', str(average_time)[-8:], 'seconds')
+    times = []
     string_length = 5
     for i in range(num_runs):
         data = [i for i in range(string_length)][::-1]
@@ -61,6 +63,7 @@ if __name__ == '__main__':  # pragma no cover
     print('Number of runs: ', num_runs)
     print('Length of lists to sort: ', string_length)
     print('Average time: ', str(average_time)[-8:], 'seconds')
+    times = []
     string_length = 100
     for i in range(num_runs):
         data = [i for i in range(string_length)][::-1]
