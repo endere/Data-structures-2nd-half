@@ -2,7 +2,7 @@
 
 
 def quick_sort(array):
-    """."""
+    """Quick sort function for our quick sort data structure."""
     if len(array) == 1:
         if not isinstance(array[0], int):
             raise TypeError('Must be an integer, please try again.')
