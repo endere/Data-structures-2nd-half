@@ -97,7 +97,7 @@ class BinarySearchTree(object):
         sides = self._check_right_left_depths(self.root)
         return sides[1] - sides[0]
 
-    def breadth_first(self):
+    def breadth_first(self):  #pragma no cover
         """Generator function that yields values from tree in breadth first order."""
         current = self.root
         the_list = []
@@ -110,7 +110,7 @@ class BinarySearchTree(object):
             except IndexError:
                 current = None
 
-    def pre_order(self):
+    def pre_order(self):  #pragma no cover
         """Generator function that yields values from tree in pre order."""
         current = self.root
         the_list = []
@@ -125,7 +125,7 @@ class BinarySearchTree(object):
                 except IndexError:
                     current = None
 
-    def post_order(self):
+    def post_order(self):  #pragma no cover
         """Generator function that yields values from tree in post order."""
         current = self.root
         the_list = []
@@ -142,7 +142,7 @@ class BinarySearchTree(object):
             except IndexError:
                 current = None
 
-    def in_order(self):
+    def in_order(self):  #pragma no cover
         """Generator function that yields values from tree in order."""
         """Get our bst back in order."""
         current = self.root
@@ -160,7 +160,7 @@ class BinarySearchTree(object):
             except IndexError:
                 current = None
 
-    def deletion(self, value):
+    def deletion(self, value):  #pragma no cover
         """Delete our nodes in our bst."""
         current = self.root
         depth_node = None
@@ -284,7 +284,7 @@ class BinarySearchTree(object):
         if depth_node:
             self._update_balance(depth_node)
 
-    def _findmax(self, remove, child):
+    def _findmax(self, remove, child):  #pragma no cover
         """Find the furthest right child of a node and returns it plus parent."""
         parent = remove
         current = child
@@ -293,7 +293,7 @@ class BinarySearchTree(object):
             current = current.right
         return [parent, current]
 
-    def _depth_of_branch(self, node):
+    def _depth_of_branch(self, node):  #pragma no cover
         """Find depth of our branch from our found node."""
         current = [node, 0]
         the_list = []
@@ -307,26 +307,11 @@ class BinarySearchTree(object):
             except IndexError:
                 return depth
 
-    def _update_balance(self, node):
+    def _update_balance(self, node):  #pragma no cover
         """Update our balance of the tree."""
-        sides = self._check_right_left_depths(node)
-        if sides[1] - sides[0] > 1:  # for right side being heavier
-            child_sides = self._check_right_left_depths(node.right)
-            if child_sides[1] - child_sides[0] < 0:
-                node = self._double_rotate_right_left(node)
-            else:
-                node = self._left_rotation(node)
-        elif sides[1] - sides[0] < -1:  # for the left side being heavier
-            child_sides = self._check_right_left_depths(node.left)
-            if child_sides[1] - child_sides[0] > 0:
+        pass
 
-                node = self._double_rotate_left_right(node)
-            else:
-                node = self._right_rotation(node)
-        if node is not self.root:
-            self._update_balance(node.parent)
-
-    def _check_right_left_depths(self, node):
+    def _check_right_left_depths(self, node):  #pragma no cover
         """Helper function to check depth of both branches of a node."""
         left_side = 0
         right_side = 0
@@ -336,7 +321,7 @@ class BinarySearchTree(object):
             left_side = 1 + self._depth_of_branch(node.left)
         return (left_side, right_side)
 
-    def _right_rotation(self, node):
+    def _right_rotation(self, node):  #pragma no cover
         """Do a right rotation of an AVL balanced tree. Returns the new branche's root."""
         n2 = node
         k = n2.left
@@ -355,7 +340,7 @@ class BinarySearchTree(object):
         k.right.parent = k
         return k
 
-    def _left_rotation(self, node):
+    def _left_rotation(self, node):  #pragma no cover
         """Do a left rotation of an AVL balanced tree. Returns the new branche's root."""
         n2 = node
         k = n2.right
@@ -374,13 +359,13 @@ class BinarySearchTree(object):
         k.left.parent = k
         return k
 
-    def _double_rotate_left_right(self, node):
+    def _double_rotate_left_right(self, node):  #pragma no cover
         """Do a double left right rotation of an AVL balanced tree. Returns the new branche's root."""
         node.left = self._left_rotation(node.left)
         k = self._right_rotation(node)
         return k
 
-    def _double_rotate_right_left(self, node):
+    def _double_rotate_right_left(self, node):  #pragma no cover
         """Do a double right left rotation of an AVL balanced tree. Returns the new branche's root."""
         node.right = self._right_rotation(node.right)
         k = self._left_rotation(node)
