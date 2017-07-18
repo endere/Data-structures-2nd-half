@@ -15,7 +15,6 @@ def merge_sort(array):
         main_count = 0
         left_count = 0
         right_count = 0
-        pass
         while left_count < len(left_half) and right_count < len(right_half):
             if left_half[left_count] < right_half[right_count]:
                 array[main_count] = left_half[left_count]
@@ -60,6 +59,7 @@ if __name__ == '__main__':  # pragma no cover
     print('Number of runs: ', num_runs)
     print('Length of lists to sort: ', string_length)
     print('Average time: ', str(average_time)[-8:], 'seconds')
+    times = []
     string_length = 100
     for i in range(num_runs):
         data = [i for i in range(string_length)]
@@ -73,6 +73,7 @@ if __name__ == '__main__':  # pragma no cover
     print('Number of runs: ', num_runs)
     print('Length of lists to sort: ', string_length)
     print('Average time: ', str(average_time)[-8:], 'seconds')
+    times = []
     string_length = 5
     for i in range(num_runs):
         data = [i for i in range(string_length)][::-1]
@@ -86,6 +87,7 @@ if __name__ == '__main__':  # pragma no cover
     print('Number of runs: ', num_runs)
     print('Length of lists to sort: ', string_length)
     print('Average time: ', str(average_time)[-8:], 'seconds')
+    times = []
     string_length = 100
     for i in range(num_runs):
         data = [i for i in range(string_length)][::-1]
@@ -99,6 +101,7 @@ if __name__ == '__main__':  # pragma no cover
     print('Number of runs: ', num_runs)
     print('Length of lists to sort: ', string_length)
     print('Average time: ', str(average_time)[-8:], 'seconds')
+    times = []
     for i in range(num_runs):
         data = random.sample(range(string_length), string_length)
         timeA = datetime.datetime.now()
